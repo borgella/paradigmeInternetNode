@@ -1,0 +1,11 @@
+# git ignore 
+node_modules
+npm-debut.log
+
+# environnement
+.*dev
+.*env
+
+#OS X files
+.DS_STORE
+Dockerfile

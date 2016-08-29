@@ -1,0 +1,27 @@
+{
+  "name": "nodeversion",
+  "version": "1.0.0",
+  "description": "The node Version of the INF4375",
+  "private": true,
+  "main": "app.js",
+  "scripts": {
+    "test": "mocha && mocha test --require blanket --reporter html-cov > coverage.html"
+  },
+  "author": "Borgella Jean Mary",
+  "license": "ISC",
+  "dependencies": {
+    "blanket": "^1.2.3",
+    "chai": "^3.5.0",
+    "kerberos": "~0.0.21",
+    "mocha": "^3.0.2",
+    "mongodb": "~2.2.9",
+    "mongoose": "~4.5.10",
+    "hateoas" :"~1.0.0"
+  },
+  "config": {
+    "blanket": {
+      "pattern": ["app.js"],
+      "data-cover-never": "node_modules"
+    }
+  }
+}
