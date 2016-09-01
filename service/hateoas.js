@@ -19,6 +19,13 @@ hateoas.registerLinkHandler("login",function(){
     }
 });
 
+hateoas.registerLinkHandler("logout",function(){
+    return {
+        "self": "/users/logout",
+        "home":"/",
+    }
+});
+
 hateoas.registerLinkHandler("signup",function(){
     return {
         "self": "/users/signup",

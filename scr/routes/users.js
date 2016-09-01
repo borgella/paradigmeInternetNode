@@ -5,8 +5,13 @@ var response = require('../views/responseJson');
 var hateoas = require('../../service/hateoas');
 
 router.get('/login',function(req,res,next){
-    res.status(200);
-    res.send(response.responseJson(true,"the login route",hateoas.link("login" , {})));
+    res.status(200)
+    .send(response.responseJson(true,"the login route",hateoas.link("login" , {})));
+});
+
+router.get('/logout',function(req,res,next){
+    res.status(200)
+    .send(response.responseJson(true,"the logout page",hateoas.link("logout",{})));
 });
 
 module.exports = router;
