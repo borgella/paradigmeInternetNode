@@ -1,6 +1,6 @@
 # git ignore 
 node_modules
-npm-debut.log
+npm-debug.log
 
 # environnement
 .*dev
