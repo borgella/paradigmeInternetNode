@@ -23,6 +23,8 @@ hateoas.registerLinkHandler("logout",function(){
     return {
         "self": "/users/logout",
         "home":"/",
+        "login": "/users/login",
+        "signup": "/users/signup"
     }
 });
 
@@ -30,7 +32,7 @@ hateoas.registerLinkHandler("signup",function(){
     return {
         "self": "/users/signup",
         "home": "/",
-        "logout": "/logout"
+        "logout": "/users/logout"
     }
 });
 

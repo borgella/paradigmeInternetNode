@@ -10,7 +10,7 @@ var hateoas = require('./service/hateoas');
 //All the app routes
 var index = require('./scr/routes/index');
 var users = require('./scr/routes/users');
-//var signup = require('./scr/routes/signup');
+var signup = require('./scr/routes/signup');
 
 var app = express();
 
@@ -21,6 +21,8 @@ app.use(cookieParser());
 //The use of the routers
 app.use('/',index);
 app.use('/users',users);
+app.use('/users/',signup);
+
 //Connect to the dataBase
 app.use(require('./configuration/database').getDataBaseConnection);
 
