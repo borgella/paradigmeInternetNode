@@ -8,3 +8,5 @@ hateoas.registerLinkHandler("home",function(){
         "self": "/"
     }
 });
+
+module.exports = hateoas;

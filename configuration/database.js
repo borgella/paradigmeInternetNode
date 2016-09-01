@@ -1,10 +1,10 @@
 "use strict"
 
-var environnement = require('./configuration/environnement');
+var environnement = require('./environnement');
 var mongoose = require('mongoose');
 var hateoas = require('../service/hateoas');
 
-exports.getDataBaseConnection = function(req,res,next){
+module.exports.getDataBaseConnection = function(req,res,next){
     if(mongoose.connection.readyState === 1){
         next();
         return;

@@ -5,5 +5,5 @@ module.exports.responseJson = function(success,body,hateoas){
         success : success,
         body : body,
         hateoas : hateoas
-    }
+    };
 }
