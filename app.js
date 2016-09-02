@@ -14,12 +14,12 @@ var signup = require('./scr/routes/signup');
 
 var app = express();
 
-//Connect to the dataBase
-app.use(require('./configuration/database').getDataBaseConnection);
-
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
+
+//Connect to the dataBase
+app.use(require('./configuration/database').getDataBaseConnection);
 
 //The use of the routers
 app.use('/',index);
