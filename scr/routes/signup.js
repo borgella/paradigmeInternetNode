@@ -37,10 +37,9 @@ function saveUser(req,res,next){
                 console.log("we will create log files");
                 next(error);
             }else{
-                console.log(req.body);
+                next();
             }
         });
-        next();
     });
 
 }
