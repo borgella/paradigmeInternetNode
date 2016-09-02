@@ -6,9 +6,9 @@ var objectId = Schema.ObjectId;
 
 mongoose.plugin(require('mongoose-valid8'));
 
-module.exports.User = mongoose.model('User',new Schema({
-    _id : objectId,
-    
+var User = mongoose.model('User',new Schema({
+    id : objectId,
+
     first_name :{
         type : String,
         trim : true,
@@ -43,6 +43,7 @@ module.exports.User = mongoose.model('User',new Schema({
 
     email:{
         type : String,
+        unique: true,
         require: [true,'The email adress is required.'],
         isEmail:{
             message:'You should provide a valid email adress format.'
@@ -84,3 +85,5 @@ module.exports.User = mongoose.model('User',new Schema({
     followers:[]
     
 }));
+
+module.exports = User;

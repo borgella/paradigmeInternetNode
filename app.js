@@ -14,6 +14,9 @@ var signup = require('./scr/routes/signup');
 
 var app = express();
 
+//Connect to the dataBase
+app.use(require('./configuration/database').getDataBaseConnection);
+
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
@@ -23,8 +26,7 @@ app.use('/',index);
 app.use('/users',users);
 app.use('/users/',signup);
 
-//Connect to the dataBase
-app.use(require('./configuration/database').getDataBaseConnection);
+
 
 // MiddleWare to catch 404 error
 app.use(function(req, res, next) {
@@ -34,11 +36,8 @@ app.use(function(req, res, next) {
 });
 
 app.use(function(err, req, res, next) {
-  res.status(err.status || 500);
-  res.send('error', {
-    message: err.message,
-    error: {}
-  });
+  res.status(err.status || 500)
+  .send('error', { message: err.message, error: {} });
 });
 
 console.log('App is listening at port '+ app.listen(environnement.PORT,function(){}).address().port);
