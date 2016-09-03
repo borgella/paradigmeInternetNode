@@ -1,5 +1,6 @@
 "use strict"
 
+var user = require('../model/user');
 
 module.exports.saveInDataBase = function (req,res,next){
     req.body.save(function(error){
@@ -12,4 +13,13 @@ module.exports.saveInDataBase = function (req,res,next){
        }else next();
 
     });
+}
+
+module.exports.findOneUser = function(value,callback){
+    user.findOne({email:value},function(error,dbUser){
+        if(error)
+            callback(error);
+        else
+            callback(dbUser);
+    }); 
 }

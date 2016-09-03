@@ -12,10 +12,10 @@ module.exports.generateSaltHash = function(value,callback){
 }
 
 module.exports.compareHash = function(value, hash, callback){
-    bcrypt.compare(value, hash, function(err, res) {
-        if(err)
-            return callback(null);
+    bcrypt.compare(value, hash, function(error, response) {
+        if(error)
+            return callback(false);
         else
-            return callback(res);
+            return callback(response);
     });
 }
