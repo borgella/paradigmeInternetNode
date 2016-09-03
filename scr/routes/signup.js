@@ -11,7 +11,7 @@ var User = require('../model/user');
 
 router.post('/signup',beforeSignup,saveUser,function(req,res,next){
     res.status(200)
-    .send(response.responseJson(true,"the signup page",hateoas.link("signup",{})));
+    .send(response.responseJson(true,"Congrulations your account have been created.",hateoas.link("signup",{})));
 });
 
 function beforeSignup(req,res,next){
