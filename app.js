@@ -8,9 +8,9 @@ var response = require('./scr/views/responseJson');
 var hateoas = require('./service/hateoas');
 
 //All the app routes
-var index = require('./scr/routes/index');
-var users = require('./scr/routes/users');
-var signup = require('./scr/routes/signup');
+var index = require('./scr/serverRoutes/index');
+var users = require('./scr/serverRoutes/users');
+var signup = require('./scr/serverRoutes/signup');
 
 var app = express();
 
