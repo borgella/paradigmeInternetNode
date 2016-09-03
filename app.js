@@ -30,14 +30,13 @@ app.use('/users/',signup);
 
 // MiddleWare to catch 404 error
 app.use(function(req, res, next) {
-  var err = new Error('The ressource can not Found');
+  var err = new Error();
   err.status = 404;
   res.status(404).send(response.responseJson(false,err.message,hateoas.link("home",{})));
 });
 
 app.use(function(err, req, res, next) {
-  res.status(err.status || 500)
-  .send('error', { message: err.message, error: {} });
+  res.status(500).send(response.responseJson(false,err.message,hateoas.link("home",{})));
 });
 
 console.log('App is listening at port '+ app.listen(environnement.PORT,function(){}).address().port);

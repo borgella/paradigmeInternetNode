@@ -1,5 +1,6 @@
 "use strict"
 
+var stringify = require('json-stringify');
 var express = require('express');
 var router = express.Router();
 var response = require('../views/responseJson');
@@ -14,32 +15,34 @@ router.post('/signup',beforeSignup,saveUser,function(req,res,next){
 });
 
 function beforeSignup(req,res,next){
-    if(req.body){
-          var user = new User(req.body);
-          user.validate(function(error){
+    if((stringify(req.body))!= "{}"){
+          req.body = new User(req.body);
+          req.body.validate(function(error){
               if(error){
                   console.log(error.errors);
+                  console.log('Validation failed...!');
                   next(error);
               }else{
-                  req.body = user;
                   next();
               }
           });
-    }
+    }else next(new Error("The body is empty. Enter informations to signup."));
 }
 
 function saveUser(req,res,next){
     util.generateSaltHash(req.body.password,function(hash){
-        req.body.password = hash;
-        req.body.save(function(error){
-            if(error){
-                console.log("can't connect to the Bd");
-                console.log("we will create log files");
-                next(error);
-            }else{
-                next();
-            }
-        });
+        if(hash){
+             req.body.password = hash;
+             req.body.save(function(error){
+                    if(error){
+                        res.status(404);
+                         if(error.code === 11000)
+                            next(new Error('This address email is already taking.'));
+                         else
+                            next(new Error('Database error connection, the document couldn t be save.'));
+                     }else next();
+              });
+        }else next(new Error('we could not hash the password.'));
     });
 
 }

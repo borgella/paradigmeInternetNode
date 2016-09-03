@@ -15,13 +15,11 @@ var User = mongoose.model('User',new Schema({
         require :[true,'You must provide your first name.'],
         isAlpha:{
             message: 'Your first name should contains characters only.',
-            options:{
-                isLength :{
-                    message :'Your first name should contains at least two characters and a maximum of 50.',
-                    min : 2,
-                    max : 50
-                }
-            }
+        },
+        isLength:{
+            message :'Your last name should contains at least two characters and a maximum of 50.',
+            min : 2,
+            max : 50
         }
     },
 
@@ -31,13 +29,11 @@ var User = mongoose.model('User',new Schema({
         require :[true,'You must provide your last name.'],
         isAlpha:{
             message: 'Your last name should contains characters only. ',
-            options:{
-                isLength :{
-                    message :'Your last name should contains at least two characters and a maximum of 50.',
-                    min : 2,
-                    max : 50
-                }
-            }
+        },
+        isLength:{
+            message :'Your last name should contains at least two characters and a maximum of 50.',
+            min : 2,
+            max : 50
         }
     },
 
@@ -56,12 +52,11 @@ var User = mongoose.model('User',new Schema({
         isAlphaNumeric:{
             message: 'Your password should contains alpha-numeric characters and at least one uppercase characters.'
         },
-
         validate:{
             validator: function(value){
                 return /.*[A-Z].*/.test(value);
             },
-            message: 'Your password should contains alpha-numeric characters and at least one uppercase characters.'
+            message: 'Your password should contains Uppercase characters.'
         }
     },
 
