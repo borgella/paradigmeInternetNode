@@ -8,6 +8,7 @@ var hateoas = require('../../service/hateoas');
 var bcrypt = require('bcrypt');
 var util = require('../../service/util');
 var User = require('../model/user');
+var userDaoImpl = require('../model/userDaoImpl');
 
 router.post('/signup',beforeSignup,saveUser,function(req,res,next){
     res.status(200)
@@ -33,15 +34,8 @@ function saveUser(req,res,next){
     util.generateSaltHash(req.body.password,function(hash){
         if(hash){
              req.body.password = hash;
-             req.body.save(function(error){
-                    if(error){
-                        res.status(404);
-                         if(error.code === 11000)
-                            next(new Error('This address email is already taking.'));
-                         else
-                            next(new Error('Database error connection, the document couldn t be save.'));
-                     }else next();
-              });
+             userDaoImpl.saveInDataBase(req,res,next);
+             
         }else next(new Error('we could not hash the password.'));
     });
 

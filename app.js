@@ -28,13 +28,14 @@ app.use('/users/',signup);
 
 
 
-// MiddleWare to catch 404 error
+// MiddleWare to catch 404 error when request ressource does not exist
 app.use(function(req, res, next) {
   var err = new Error();
   err.status = 404;
   res.status(404).send(response.responseJson(false,err.message,hateoas.link("home",{})));
 });
 
+// MiddleWare to catch 500 internal error from the server
 app.use(function(err, req, res, next) {
   res.status(500).send(response.responseJson(false,err.message,hateoas.link("home",{})));
 });
