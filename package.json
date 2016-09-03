@@ -13,6 +13,7 @@
     "blanket": "^1.2.3",
     "chai": "^3.5.0",
     "hateoas": "~1.0.0",
+    "jsonwebtoken": "^7.1.9",
     "kerberos": "~0.0.21",
     "mocha": "^3.0.2",
     "mongodb": "~2.2.9",
