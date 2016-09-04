@@ -34,8 +34,7 @@ function saveUser(req,res,next){
     util.generateSaltHash(req.body.password,function(hash){
         if(hash){
              req.body.password = hash;
-             userDaoImpl.saveInDataBase(req,res,next);
-             
+             userDaoImpl.saveInDataBase(req,res,next);         
         }else next(new Error('we could not hash the password.'));
     });
 
