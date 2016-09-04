@@ -21,7 +21,7 @@ app.use(cookieParser());
 //Connect to the dataBase
 app.use(require('./configuration/database').getDataBaseConnection);
 
-//The use of the routers
+//The use of the routes
 app.use('/',index);
 app.use('/users',users);
 app.use('/users/',signup);
