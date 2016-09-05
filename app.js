@@ -7,7 +7,6 @@ var environnement = require('./configuration/environnement');
 var response = require('./scr/views/responseJson');
 var hateoas = require('./service/hateoas');
 var expressJWT = require('express-jwt');
-var jsonwebtoken  = require('jsonwebtoken');
 
 //All the app routes
 var index = require('./scr/serverRoutes/index');

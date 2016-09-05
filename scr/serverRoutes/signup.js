@@ -10,9 +10,10 @@ var util = require('../../service/util');
 var User = require('../model/user');
 var userDaoImpl = require('../model/userDaoImpl');
 
+
 router.post('/signup',beforeSignup,saveUser,function(req,res,next){
     res.status(201)
-    .send(response.responseJson(true,req.body,hateoas.link("signup",{})));
+    .send(response.responseJson(true,req.body.token,hateoas.link("signup",{})));
 });
 
 function beforeSignup(req,res,next){
@@ -24,7 +25,10 @@ function beforeSignup(req,res,next){
                   console.log('Validation failed...!');
                   next(error);
               }else{
-                  next();
+                  util.generateToken(req.body.last_name,function(token){
+                      req.body.token = token;
+                      next();
+                  });
               }
           });
     }else next(new Error("The body is empty. Enter informations to signup."));
