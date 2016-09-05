@@ -6,6 +6,8 @@ var cookieParser = require('cookie-parser');
 var environnement = require('./configuration/environnement');
 var response = require('./scr/views/responseJson');
 var hateoas = require('./service/hateoas');
+var expressJWT = require('express-jwt');
+var jsonwebtoken  = require('jsonwebtoken');
 
 //All the app routes
 var index = require('./scr/serverRoutes/index');
@@ -14,9 +16,12 @@ var signup = require('./scr/serverRoutes/signup');
 
 var app = express();
 
+//app useful librairies
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
+app.use(expressJWT({secret: environnement.SECRET}).unless({path: environnement.PATH}));
+
 
 //Connect to the dataBase
 app.use(require('./configuration/database').getDataBaseConnection);

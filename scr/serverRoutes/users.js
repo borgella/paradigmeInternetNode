@@ -8,12 +8,12 @@ var userDaoImpl = require('../model/userDaoImpl');
 
 router.post('/login',findTheUser,function(req,res,next){
     res.status(200)
-    .send(response.responseJson(true,"Your are sucessfully connected...",hateoas.link("login" , {})));
+    .send(response.responseJson(true,req.body,hateoas.link("login" , {})));
 });
 
 router.get('/logout',function(req,res,next){
     res.status(200)
-    .send(response.responseJson(true,"bye see you next",hateoas.link("logout",{})));
+    .send(response.responseJson(true,"bye see you next time.",hateoas.link("logout",{})));
 });
 
 
@@ -21,12 +21,13 @@ function findTheUser(req,res,next){
     userDaoImpl.findOneUser(req.body.email,function(user){
         if(user){
             util.compareHash(req.body.password,user.password,function(response){
-                if(response)
+                if(response){
+                    req.body = user;
                     next();
-                else 
+                }else 
                     next(new Error("The password you entered did not match with our database."));
             });
-        }
+        }else next(new Error('You do not have an account yet, please sign up to have access.'));
     });
 }
 

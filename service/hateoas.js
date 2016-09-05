@@ -32,7 +32,7 @@ hateoas.registerLinkHandler("signup",function(){
     return {
         "self": "/users/signup",
         "home": "/",
-        "logout": "/users/logout"
+        "logout": "/users/nlogout"
     }
 });
 

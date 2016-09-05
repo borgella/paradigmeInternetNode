@@ -12,7 +12,9 @@
   "dependencies": {
     "blanket": "^1.2.3",
     "chai": "^3.5.0",
+    "express-jwt": "^3.4.0",
     "hateoas": "~1.0.0",
+    "json-stringify": "^1.0.0",
     "jsonwebtoken": "^7.1.9",
     "kerberos": "~0.0.21",
     "mocha": "^3.0.2",

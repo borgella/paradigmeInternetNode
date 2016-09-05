@@ -11,8 +11,8 @@ var User = require('../model/user');
 var userDaoImpl = require('../model/userDaoImpl');
 
 router.post('/signup',beforeSignup,saveUser,function(req,res,next){
-    res.status(200)
-    .send(response.responseJson(true,"Congrulations your account have been created.",hateoas.link("signup",{})));
+    res.status(201)
+    .send(response.responseJson(true,req.body,hateoas.link("signup",{})));
 });
 
 function beforeSignup(req,res,next){
