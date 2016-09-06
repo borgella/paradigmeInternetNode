@@ -7,7 +7,7 @@ var jwt = require('jsonwebtoken');
 module.exports.generateSaltHash = function(value,callback){
     bcrypt.hash(value, 10, function(err, hash) {   
         if(err)
-            return callback(null);
+            return callback(error);
         else
             return callback(hash);
     });
@@ -16,7 +16,7 @@ module.exports.generateSaltHash = function(value,callback){
 module.exports.compareHash = function(value, hash, callback){
     bcrypt.compare(value, hash, function(error, response) {
         if(error)
-            return callback(false);
+            return callback(error);
         else
             return callback(response);
     });
@@ -25,7 +25,7 @@ module.exports.compareHash = function(value, hash, callback){
 module.exports.generateToken = function(payload,callback){
     jwt.sign({last_name: payload},environnement.SECRET,{expiresIn: 86400},function(error,jwt){
         if(error)
-            return callback(false);
+            return callback(error);
         else
             return callback(jwt);
     });
@@ -34,7 +34,7 @@ module.exports.generateToken = function(payload,callback){
 module.exports.decodeToken = function(token,callback){
     jwt.verify(token,environnement.SECRET,function(error,decoded){
         if(error)
-            return callback(false);
+            return callback(error);
         else 
             return callback(decoded.last_name);   
     }); 

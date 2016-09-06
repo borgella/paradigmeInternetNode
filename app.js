@@ -7,6 +7,7 @@ var environnement = require('./configuration/environnement');
 var response = require('./scr/views/responseJson');
 var hateoas = require('./service/hateoas');
 var expressJWT = require('express-jwt');
+var passport = require('./service/facebook');
 
 //All the app routes
 var index = require('./scr/serverRoutes/index');
@@ -20,6 +21,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(expressJWT({secret: environnement.SECRET}).unless({path: environnement.PATH}));
+app.use(passport.initialize());
 
 
 //Connect to the dataBase
@@ -27,6 +29,7 @@ app.use(require('./configuration/database').getDataBaseConnection);
 
 //The use of the routes
 app.use('/',index);
+app.use('/auth',index);
 app.use('/users',users);
 app.use('/users/',signup);
 
