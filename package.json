@@ -5,25 +5,27 @@
   "private": true,
   "main": "app.js",
   "scripts": {
-    "test": "mocha && mocha test --require blanket --reporter html-cov > coverage.html"
+    "test": "mocha && mocha test --require blanket --reporters html-cov > out.html"
   },
   "author": "Borgella Jean Mary",
   "license": "ISC",
   "dependencies": {
-    "blanket": "^1.2.3",
-    "chai": "^3.5.0",
     "express-jwt": "^3.4.0",
     "hateoas": "~1.0.0",
     "json-stringify": "^1.0.0",
     "jsonwebtoken": "^7.1.9",
     "kerberos": "~0.0.21",
-    "mocha": "^3.0.2",
     "mongodb": "~2.2.9",
     "mongoose": "~4.5.10",
     "mongoose-valid8": "^0.1.1",
     "mongoose-validator": "^1.2.5",
     "passport": "^0.3.2",
     "passport-facebook": "^2.1.1"
+  }, 
+  "devDependencies": {
+    "mocha": "^3.0.2",
+    "blanket": "^1.2.3",
+    "chai": "^3.5.0"
   },
   "config": {
     "blanket": {
