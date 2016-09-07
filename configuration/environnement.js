@@ -6,6 +6,6 @@ module.exports = {
     DATABASE_URL: process.env.DATABASE_URL || 'mongodb://localhost:27017/paradigmedb',
     SECRET: process.env.SECRET || 'si yo di w yo we m ou met di se pa vre',
     CLIENT_ID: process.env.CLIENT_ID || 322608071422956,
-    CLIENT_SECRET: process.env.CLIENT_SECRET || '75e2b170e0cd90f23cd23a331747cac1',
+    CLIENT_SECRET: process.env.CLIENT_SECRET || '9ba5a624c5392b9fb26a89e66a4abe63',
     PATH:  ['/','/auth/facebook/callback','/auth/facebook','/users/signup','/login']
 }
