@@ -9,4 +9,6 @@ npm-debug.log
 #OS X files
 .DS_STORE
 Dockerfile
+*.html
+*.opts
 test/
