@@ -23,11 +23,11 @@ module.exports.compareHash = function(value, hash, callback){
 }
 
 module.exports.generateToken = function(payload,callback){
-    jwt.sign({last_name: payload},environnement.SECRET,{expiresIn: 86400},function(error,jwt){
+    jwt.sign({email: payload},environnement.SECRET,{expiresIn: 86400},function(error,token){
         if(error)
             return callback(error);
         else
-            return callback(jwt);
+            return callback(token);
     });
 }
 
@@ -36,6 +36,6 @@ module.exports.decodeToken = function(token,callback){
         if(error)
             return callback(error);
         else 
-            return callback(decoded.last_name);   
+            return callback(decoded.email);   
     }); 
 }

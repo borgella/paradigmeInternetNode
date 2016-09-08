@@ -1,14 +1,21 @@
 "use strict"
 
 var chai = require('chai');
-var expect = require('chai').expect;
+var http = require('chai-http');
+chai.use(http);
 var assert = require('chai').assert;
+var server = require('../configuration/environnement').BASE_URL;
+
+var request = chai.request(server);
 
 
-describe('Blobs', function() {
-  it('should list ALL blobs on /blobs GET');
-  it('should list a SINGLE blob on /blob/<id> GET');
-  it('should add a SINGLE blob on /blobs POST');
-  it('should update a SINGLE blob on /blob/<id> PUT');
-  it('should delete a SINGLE blob on /blob/<id> DELETE');
+describe('Home',function(){
+  it('GET / ',function(done){
+      request.get('/')
+      .end(function(err, res){
+        assert.equal(res.status,200);
+        assert.equal(res.body.success,true);
+        done();
+      });
+  });
 });

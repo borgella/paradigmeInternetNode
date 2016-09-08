@@ -1,6 +1,7 @@
 # git ignore 
 node_modules
 npm-debug.log
+test/
 
 # environnement
 .*dev
@@ -11,4 +12,3 @@ npm-debug.log
 Dockerfile
 *.html
 *.opts
-test/
