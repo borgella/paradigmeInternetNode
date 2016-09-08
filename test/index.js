@@ -10,7 +10,7 @@ var request = chai.request(server);
 
 
 describe('Home',function(){
-  it('GET / ',function(done){
+  it('Get / ',function(done){
       request.get('/')
       .end(function(err, res){
         assert.equal(res.status,200);
