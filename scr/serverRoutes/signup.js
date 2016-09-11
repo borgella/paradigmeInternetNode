@@ -5,7 +5,6 @@ var express = require('express');
 var router = express.Router();
 var response = require('../views/responseJson');
 var hateoas = require('../../service/hateoas');
-var bcrypt = require('bcrypt');
 var util = require('../../service/util');
 var User = require('../model/user');
 var userDaoImpl = require('../model/userDaoImpl');

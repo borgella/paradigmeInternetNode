@@ -6,7 +6,7 @@ var objectId = Schema.ObjectId;
 
 mongoose.plugin(require('mongoose-valid8'));
 
-var UserSchema = mongoose.Schema({
+var User = mongoose.model('User',new Schema({
     id : objectId,
 
     first_name :{
@@ -67,7 +67,7 @@ var UserSchema = mongoose.Schema({
             default: Date.now
         },
         text:{
-            type: String
+            type: Object
         }
     },
 
@@ -79,34 +79,6 @@ var UserSchema = mongoose.Schema({
 
     followers:[]
     
-});
-
-UserSchema.methods.speaks = function(){
-    console.log(this.last_name);
-}
-
- UserSchema.methods.getOneTweet = function(_id){
-    this.tweets.findIndex(function(_id){
-        if(tweet._id === _id)
-            return tweet;
-    });
-    return null;
-}
-
-UserSchema.methods.addTweet = function(tweet){
-    this.tweets.push(tweet);
-}
-
-UserSchema.methods.addRetweet = function(_id){
-    if(this.followers.tweets.indexOf(_id) != -1){
-        this.retweets.push(this.followers.getOneTweet(_id));
-        return this.followers.getOneTweet(_id);
-    }
-    return null;
-}
-
-
-
-var User = mongoose.model('User',UserSchema);
+}));
 
 module.exports = User;

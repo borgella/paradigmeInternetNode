@@ -24,14 +24,13 @@ function findTheUser(req,res,next){
     userDaoImpl.findOneUser(req.body.email,function(user){
         if(user){
             util.compareHash(req.body.password,user.password,function(response){
-                if(response){
-                    req.body = user;
-                    util.generateToken(req.body.last_name,function(token){
-                      req.body.token = token;
-                      next();
-                    });
-                }else 
-                    next(new Error("The password you entered did not match with our database."));
+                    if(response){
+                          req.body = user;
+                          util.generateToken(req.body.last_name,function(token){
+                                req.body.token = token;
+                                next(); 
+                          });
+                     }else next(new Error("The password you entered did not match with our database."));
             });
         }else next(new Error('You do not have an account yet, please sign up to have access.'));
     });

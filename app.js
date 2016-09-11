@@ -13,6 +13,7 @@ var passport = require('./service/facebook');
 var index = require('./scr/serverRoutes/index');
 var users = require('./scr/serverRoutes/users');
 var signup = require('./scr/serverRoutes/signup');
+var utilisateurs = require('./scr/serverRoutes/utilisateurs');
 
 var app = express();
 
