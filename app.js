@@ -33,6 +33,7 @@ app.use('/',index);
 app.use('/auth',index);
 app.use('/users',users);
 app.use('/users/',signup);
+app.use('/utilisateurs',utilisateurs);
 
 
 

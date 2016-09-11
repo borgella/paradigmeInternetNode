@@ -24,7 +24,10 @@ function beforeSignup(req,res,next){
                   console.log('Validation failed...!');
                   next(error);
               }else{
-                  util.generateToken(req.body.email,function(token){
+                  util.generateToken(req.body.email,function(tokens){
+                      var token ={};
+                      token.id = req.body._id;
+                      token.token = tokens;
                       req.body.token = token;
                       next();
                   });
