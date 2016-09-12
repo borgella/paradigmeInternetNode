@@ -21,12 +21,12 @@ router.get('/logout',function(req,res,next){
 
 function findTheUser(req,res,next){
     console.log(req.headers['x-access-token']);
-    userDaoImpl.findOneUser(req.body.email,function(user){
-        if(user){
-            util.compareHash(req.body.password,user.password,function(response){
+    userDaoImpl.findUserByEmail(req.body.email,function(dbUser){
+        if(dbUser){
+            util.compareHash(req.body.password,dbUser.password,function(response){
                     if(response){
-                          req.body = user;
-                          util.generateToken(req.body.last_name,function(token){
+                          req.body = dbUser;
+                          util.generateToken(req.body.email,function(token){
                                 req.body.token = token;
                                 next(); 
                           });

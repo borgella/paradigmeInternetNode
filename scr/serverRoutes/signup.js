@@ -20,14 +20,10 @@ function beforeSignup(req,res,next){
           req.body = new User(req.body);
           req.body.validate(function(error){
               if(error){
-                  console.log(error.errors);
-                  console.log('Validation failed...!');
                   next(error);
               }else{
                   util.generateToken(req.body.email,function(tokens){
-                      var token ={};
-                      token.id = req.body._id;
-                      token.token = tokens;
+                      var token = {id:req.body._id, token:tokens};
                       req.body.token = token;
                       next();
                   });

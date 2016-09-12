@@ -5,6 +5,7 @@ var router = express.Router();
 var response = require('../views/responseJson');
 var hateoas = require('../../service/hateoas');
 var util = require('../../service/util');
+var userDaoImpl = require('../model/userDaoImpl');
 
 
 router.get('/fil',getFil,function(req,res,next){

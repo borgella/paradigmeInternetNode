@@ -15,11 +15,21 @@ module.exports.saveInDataBase = function (req,res,next){
     });
 }
 
-module.exports.findOneUser = function(value,callback){
+module.exports.findUserByEmail = function(value,callback){
     user.findOne({email:value},function(error,dbUser){
         if(error)
-            callback(error);
+            return callback(error);
         else
-            callback(dbUser);
+           return callback(dbUser);
     }); 
+}
+
+module.exports.findUserById = function(id, callback){
+    user.findOne({_id:id},function(err,dbUser){
+        if(err)
+            return callback(err);
+        else 
+            return callback(dbUser);
+    });
+
 }
