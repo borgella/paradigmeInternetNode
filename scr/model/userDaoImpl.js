@@ -1,8 +1,8 @@
 "use strict"
+var mongoose = require('mongoose');
+var User = require('../model/user');
 
-var user = require('../model/user');
-
-module.exports.saveInDataBase = function (req,res,next){
+module.exports.saveInDataBase = function (req, res, next){
     req.body.save(function(error){
        if(error){
            res.status(404);
@@ -15,8 +15,8 @@ module.exports.saveInDataBase = function (req,res,next){
     });
 }
 
-module.exports.findUserByEmail = function(value,callback){
-    user.findOne({email:value},function(error,dbUser){
+module.exports.findUserByEmail = function(req, callback){
+    User.findOne({email: req.body.email}, function(error, dbUser){
         if(error)
             return callback(error);
         else
@@ -24,12 +24,27 @@ module.exports.findUserByEmail = function(value,callback){
     }); 
 }
 
-module.exports.findUserById = function(id, callback){
-    user.findOne({_id:id},function(err,dbUser){
+module.exports.findUserById = function(req, callback){
+    User.findOne({_id: stringToObectId(req.headers._id)}, function(err, dbUser){
         if(err)
             return callback(err);
         else 
             return callback(dbUser);
     });
 
+}
+
+module.exports.postTweet = function(req, callback){
+    User.findOneAndUpdate({_id: stringToObectId(req.headers._id)},
+        {$push:{tweets: req.body.tweet}},
+        function(err, dbUser){
+            if(err)
+                return callback(err);
+            else 
+                return callback(dbUser);
+        });
+}
+
+function stringToObectId(a_string){
+    return new mongoose.mongo.ObjectId(a_string);
 }

@@ -60,7 +60,7 @@ var UserSchema = mongoose.Schema({
         }
     },
 
-    tweet:{
+    Tweet:{
         _id: objectId,
         date:{
             type: Date,
