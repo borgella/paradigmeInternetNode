@@ -8,25 +8,25 @@ var environnement = require('../../configuration/environnement');
 var userDaoImpl = require('../model/userDaoImpl');
 var jwt  = require('jsonwebtoken');
 
-router.post('/login',findTheUser,function(req,res,next){
+router.post('/login', findTheUser, function(req,res,next){
     res.status(200)
-    .send(response.responseJson(true,req.body.token,hateoas.link("login" , {})));
+    .send(response.responseJson(true, req.body.token, hateoas.link("login" , {})));
 });
 
-router.get('/logout',function(req,res,next){
+router.get('/logout', function(req, res, next){
     res.status(200)
-    .send(response.responseJson(true,"bye see you next time.",hateoas.link("logout",{})));
+    .send(response.responseJson(true, "bye see you next time.", hateoas.link("logout", {})));
 });
 
 
-function findTheUser(req,res,next){
+function findTheUser(req, res, next){
     console.log(req.headers['x-access-token']);
-    userDaoImpl.findUserByEmail(req,function(dbUser){
+    userDaoImpl.findUserByEmail(req, function(dbUser){
         if(dbUser){
-            util.compareHash(req.body.password,dbUser.password,function(response){
+            util.compareHash(req.body.password, dbUser.password, function(response){
                     if(response){
                           req.body = dbUser;
-                          util.generateToken(req.body.email,function(token){
+                          util.generateToken(req.body.email, function(token){
                                 req.body.token = token;
                                 next(); 
                           });

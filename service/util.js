@@ -4,7 +4,7 @@ var bcrypt = require('bcrypt');
 var environnement = require("../configuration/environnement");
 var jwt = require('jsonwebtoken');
 
-module.exports.generateSaltHash = function(value,callback){
+module.exports.generateSaltHash = function(value, callback){
     bcrypt.hash(value, 10, function(err, hash) {   
         if(err)
             return callback(error);
@@ -22,8 +22,8 @@ module.exports.compareHash = function(value, hash, callback){
     });
 }
 
-module.exports.generateToken = function(payload,callback){
-    jwt.sign({email:payload}, environnement.SECRET, {expiresIn: 86400}, function(error,token){
+module.exports.generateToken = function(payload, callback){
+    jwt.sign({email:payload}, environnement.SECRET, {expiresIn: 86400}, function(error, token){
         if(error)
             return callback(error);
         else
@@ -31,8 +31,8 @@ module.exports.generateToken = function(payload,callback){
     });
 }
 
-module.exports.decodeToken = function(token,callback){
-    jwt.verify(token,environnement.SECRET, function(error,decoded){
+module.exports.decodeToken = function(token, callback){
+    jwt.verify(token,environnement.SECRET, function(error, decoded){
         if(error)
             return callback(error);
         else 

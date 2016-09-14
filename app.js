@@ -29,11 +29,11 @@ app.use(passport.initialize());
 app.use(require('./configuration/database').getDataBaseConnection);
 
 //The use of the routes
-app.use('/',index);
-app.use('/auth',index);
-app.use('/users',users);
-app.use('/users/',signup);
-app.use('/utilisateurs',utilisateurs);
+app.use('/', index);
+app.use('/auth', index);
+app.use('/users', users);
+app.use('/users/', signup);
+app.use('/utilisateurs', utilisateurs);
 
 
 
@@ -41,12 +41,12 @@ app.use('/utilisateurs',utilisateurs);
 app.use(function(req, res, next) {
   var err = new Error();
   err.status = 404;
-  res.status(404).send(response.responseJson(false,err.message,hateoas.link("home",{})));
+  res.status(404).send(response.responseJson(false, err.message, hateoas.link("home", {})));
 });
 
 // MiddleWare to catch 500 internal error from the server
 app.use(function(err, req, res, next) {
-  res.status(500).send(response.responseJson(false,err.message,hateoas.link("home",{})));
+  res.status(500).send(response.responseJson(false, err.message, hateoas.link("home", {})));
 });
 
-console.log('App is listening at port '+ app.listen(environnement.PORT,function(){}).address().port);
+console.log('App is listening at port '+ app.listen(environnement.PORT, function(){}).address().port);

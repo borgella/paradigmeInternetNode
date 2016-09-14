@@ -10,20 +10,20 @@ var User = require('../model/user');
 var userDaoImpl = require('../model/userDaoImpl');
 
 
-router.post('/signup',beforeSignup,saveUser,function(req,res,next){
+router.post('/signup', beforeSignup, saveUser, function(req, res, next){
     res.status(201)
-    .send(response.responseJson(true,req.body.token,hateoas.link("signup",{})));
+    .send(response.responseJson(true, req.body.token, hateoas.link("signup", {})));
 });
 
-function beforeSignup(req,res,next){
+function beforeSignup(req, res, next){
     if((stringify(req.body))!= "{}"){
           req.body = new User(req.body);
           req.body.validate(function(error){
               if(error){
                   next(error);
               }else{
-                  util.generateToken(req.body.email,function(tokens){
-                      var token = {id:req.body._id, token:tokens};
+                  util.generateToken(req.body.email, function(tokens){
+                      var token = {id: req.body._id, token: tokens};
                       req.body.token = token;
                       next();
                   });
@@ -32,11 +32,11 @@ function beforeSignup(req,res,next){
     }else next(new Error("The body is empty. Enter informations to signup."));
 }
 
-function saveUser(req,res,next){
-    util.generateSaltHash(req.body.password,function(hash){
+function saveUser(req, res, next){
+    util.generateSaltHash(req.body.password, function(hash){
         if(hash){
              req.body.password = hash;
-             userDaoImpl.saveInDataBase(req,res,next);         
+             userDaoImpl.saveInDataBase(req, res, next);         
         }else next(new Error('we could not hash the password.'));
     });
 
