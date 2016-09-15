@@ -81,10 +81,6 @@ var UserSchema = mongoose.Schema({
 
 });
 
-UserSchema.methods.speaks = function () {
-    console.log(this.last_name);
-}
-
 UserSchema.methods.getOneTweet = function (_id) {
     this.tweets.findIndex(function (_id) {
         if (tweet._id === _id)

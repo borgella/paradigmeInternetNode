@@ -17,6 +17,19 @@ router.post('/tweets', postTweet, function (req, res, next) {
         .send(response.responseJson(true, req.body.tweet, hateoas.link("home", {})));
 });
 
+router.get('/tweet', function(req, res, next){
+    res.status(200)
+        .send(response.responseJson(true, "get a specific tweet", hateoas.link("home", {})));
+});
+
+router.delete('/tweet', function(req, res, next){
+    console.log("the delete method");
+    res.status(200)
+        .send(response.responseJson(true, 'Delete Method', hateoas.link("home", {})));
+})
+
+
+
 function getFil(req, res, next) {
     userDaoImpl.findUserById(req, function (dbUser) {
         if (dbUser) {
@@ -27,7 +40,6 @@ function getFil(req, res, next) {
 }
 
 function postTweet(req, res, next) {
-    req.body.tweet = { date: new Date(), tweet: req.body.tweet };
     userDaoImpl.postTweet(req, function (dbUser) {
         if (dbUser) {
             next();
