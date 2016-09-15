@@ -13,7 +13,7 @@ module.exports.getDataBaseConnection = function(req, res, next){
         mongoose.connect(environnement.DATABASE_URL, function(err){
             if(err){
                 res.status(400)
-                .send(response.responseJson(false, "Something went wrong,cant connect to the database...!", hateoas.link("home", {})));
+                    .send(response.responseJson(false, "Something went wrong,cant connect to the database...!", hateoas.link("home", {})));
                 next();
             }else{
                 console.log("Sucessfuly connected to " + environnement.DATABASE_URL + "...!");

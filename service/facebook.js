@@ -10,16 +10,16 @@ passport.use(new FacebookStrategy({
     clientSecret: environnement.CLIENT_SECRET,
     callbackURL: environnement.BASE_URL + '/'
 },
-function(accessToken, refreshToken, profile, callback){
-    return callback(null, profile);
-}));
+    function (accessToken, refreshToken, profile, callback) {
+        return callback(null, profile);
+    }));
 
-passport.serializeUser(function(user,callback){
+passport.serializeUser(function (user, callback) {
     callback(null, user);
 });
 
-passport.deserializeUser(function(user,callback){
-    callback(null,user);
+passport.deserializeUser(function (user, callback) {
+    callback(null, user);
 });
 
 module.exports = passport;

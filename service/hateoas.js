@@ -1,9 +1,9 @@
 "use strict"
 
 var environnement = require("../configuration/environnement");
-var hateoas = require("hateoas")({baseUrl:environnement.BASE_URL});
+var hateoas = require("hateoas")({ baseUrl: environnement.BASE_URL });
 
-hateoas.registerLinkHandler("home",function(){
+hateoas.registerLinkHandler("home", function () {
     return {
         "self": "/",
         "login": "/users/login",
@@ -11,24 +11,24 @@ hateoas.registerLinkHandler("home",function(){
     }
 });
 
-hateoas.registerLinkHandler("login",function(){
+hateoas.registerLinkHandler("login", function () {
     return {
         "self": "/users/login",
-        "home":"/",
+        "home": "/",
         "logout": "/users/logout",
     }
 });
 
-hateoas.registerLinkHandler("logout",function(){
+hateoas.registerLinkHandler("logout", function () {
     return {
         "self": "/users/logout",
-        "home":"/",
+        "home": "/",
         "login": "/users/login",
         "signup": "/users/signup"
     }
 });
 
-hateoas.registerLinkHandler("signup",function(){
+hateoas.registerLinkHandler("signup", function () {
     return {
         "self": "/users/signup",
         "home": "/",

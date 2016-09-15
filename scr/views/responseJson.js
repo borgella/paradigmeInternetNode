@@ -1,9 +1,9 @@
 "use strict"
 
-module.exports.responseJson = function(success, body, hateoas){
+module.exports.responseJson = function (success, body, hateoas) {
     return {
-        success : success,
-        body : body,
-        hateoas : hateoas
+        success: success,
+        body: body,
+        hateoas: hateoas
     };
 }
