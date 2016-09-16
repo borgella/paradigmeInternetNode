@@ -37,7 +37,7 @@ module.exports.findUserById = function (req, callback) {
 }
 
 module.exports.postTweet = function (req, callback) {
-    req.body.tweet = { _id: generateMongooseId(), date: new Date(), tweet: req.body.text};
+    req.body.tweet = { _id: generateMongooseId(), date: new Date(), tweet: req.body.text };
     User.findOneAndUpdate({ _id: stringToObectId(req.headers._id) },
         { $push: { tweets: req.body.tweet } },
         function (err, dbUser) {
@@ -52,6 +52,6 @@ function stringToObectId(a_string) {
     return new mongoose.mongo.ObjectId(a_string);
 }
 
-function generateMongooseId(){
+function generateMongooseId() {
     return mongoose.Types.ObjectId();
 }
