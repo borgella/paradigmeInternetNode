@@ -81,28 +81,6 @@ var UserSchema = mongoose.Schema({
 
 });
 
-UserSchema.methods.getOneTweet = function (_id) {
-    this.tweets.findIndex(function (_id) {
-        if (tweet._id === _id)
-            return tweet;
-    });
-    return null;
-}
-
-UserSchema.methods.addTweet = function (tweet) {
-    this.tweets.push(tweet);
-}
-
-UserSchema.methods.addRetweet = function (_id) {
-    if (this.followers.tweets.indexOf(_id) != -1) {
-        this.retweets.push(this.followers.getOneTweet(_id));
-        return this.followers.getOneTweet(_id);
-    }
-    return null;
-}
-
-
-
 var User = mongoose.model('User', UserSchema);
 
 module.exports = User;
