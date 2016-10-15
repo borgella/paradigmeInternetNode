@@ -40,11 +40,13 @@ function getFil(req, res, next) {
 }
 
 function postTweet(req, res, next) {
-    userDaoImpl.postTweet(req, function (dbUser) {
-        if (dbUser) {
-            next();
-        } else next(new Error('user do not exist post'));
-    });
+    if(req.body.text.length <= 140){
+         userDaoImpl.postTweet(req, function (dbUser) {
+            if (dbUser) {
+                next();
+            } else next(new Error('user do not exist post'));
+        });
+    }else next (new Error('The length of your tweet should be less or equal to 140 characters.'));
 }
 
 module.exports = router;
