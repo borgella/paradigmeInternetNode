@@ -59,18 +59,7 @@ var UserSchema = mongoose.Schema({
             message: 'Your password should contains Uppercase characters.'
         }
     },
-
-    Tweet: {
-        _id: objectId,
-        date: {
-            type: Date,
-            default: Date.now
-        },
-        text: {
-            type: String
-        }
-    },
-
+    
     tweets: [],
 
     retweets: [],
