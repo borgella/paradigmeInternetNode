@@ -65,18 +65,39 @@ module.exports.deleteTweet = function(req, callback){
                 return callback(err);
             else
                 return callback(dbUser.tweets);
-    });
+        });
 }
 
 module.exports.addSubscribers = function(req, callback){
     User.findOneAndUpdate({_id: stringToObectId(req.headers._id) }, 
-    {$push: {subcribers: "toto" } },
-    function(err, dbUser){
-        if(err)
+        {$push: {subscribers: stringToObectId(req.headers._idsub) } },
+        function(err, dbUser){
+            if(err)
+                return callback(err);
+            else
+                return callback(dbUser);
+        });
+}
+
+module.exports.addFollowers = function(req, callback){
+     User.findOneAndUpdate({_id: stringToObectId(req.headers._idsub) }, 
+         {$push: {followers: stringToObectId(req.headers._id) } },
+         function(err, dbUser){
+              if(err)
+                  return callback(err);
+              else
+                  return callback(dbUser);
+     });
+}
+
+module.exports.userIsNotSubscribeYet = function(req, callback){
+    User.findOne({_id: stringToObectId(req.headers._id) }, function(err, dbUser){
+       if(err)
             return callback(err);
-        else
-            return callback(dbUser);
+        else           
+            return callback(dbUser.subscribers.indexOf(stringToObectId(req.headers._idsub)));
     });
+    
 }
 
 function stringToObectId(a_string) {
@@ -86,3 +107,4 @@ function stringToObectId(a_string) {
 function generateMongooseId() {
     return mongoose.Types.ObjectId();
 }
+

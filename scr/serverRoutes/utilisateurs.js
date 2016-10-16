@@ -47,15 +47,26 @@ router.delete('/tweet', function(req, res, next){
     });
 });
 
-router.put('/abonnements', function(req, res, next){
+router.put('/abonnements',beforeSubscribeUser, function(req, res, next){
     console.log(req.headers._id +" "+req.headers._idsub);
     userDaoImpl.addSubscribers(req, function(dbUser){
        if(dbUser){
-            res.status(200)
-               .send(response.responseJson(true, "put requests", hateoas.link("home", {})));           
+           userDaoImpl.addFollowers(req, next, function(userFollowed){
+               req.body.subscriber = userFollowed;
+               res.status(200)
+                  .send(response.responseJson(true, req.body.subscriber, hateoas.link("home", {}))); 
+            });          
        }else next(new Error('user do no exist abonnements.'));
     });
     
 });
+
+function beforeSubscribeUser(req, res, next){
+    userDaoImpl.userIsNotSubscribeYet(req,function(value){
+        if(value == -1){
+           next();
+        }else next(new Error('You already followed this user.'));
+    });    
+}
 
 module.exports = router;
