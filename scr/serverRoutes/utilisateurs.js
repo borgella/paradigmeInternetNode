@@ -12,12 +12,12 @@ router.get('/fil', getFil, function (req, res, next) {
         .send(response.responseJson(true, "Utilisateur requests", hateoas.link("home", {})));
 });
 
-router.post('/tweets', postTweet, function (req, res, next) {
+router.post('/tweet', postTweet, function (req, res, next) {
     res.status(200)
         .send(response.responseJson(true, req.body.tweet, hateoas.link("home", {})));
 });
 
-router.get('/tweet', function(req, res, next){
+router.get('/tweets', function(req, res, next){
     res.status(200)
         .send(response.responseJson(true, "get a specific tweet", hateoas.link("home", {})));
 });
