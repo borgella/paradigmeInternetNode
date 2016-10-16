@@ -68,6 +68,17 @@ module.exports.deleteTweet = function(req, callback){
     });
 }
 
+module.exports.addSubscribers = function(req, callback){
+    User.findOneAndUpdate({_id: stringToObectId(req.headers._id) }, 
+    {$push: {subcribers: "toto" } },
+    function(err, dbUser){
+        if(err)
+            return callback(err);
+        else
+            return callback(dbUser);
+    });
+}
+
 function stringToObectId(a_string) {
     return new mongoose.mongo.ObjectId(a_string);
 }

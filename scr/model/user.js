@@ -64,7 +64,7 @@ var UserSchema = mongoose.Schema({
 
     retweets: [],
 
-    subcribers: [],
+    subscribers: [],
 
     followers: []
 

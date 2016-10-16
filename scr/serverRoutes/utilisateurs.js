@@ -47,4 +47,15 @@ router.delete('/tweet', function(req, res, next){
     });
 });
 
+router.put('/abonnements', function(req, res, next){
+    console.log(req.headers._id +" "+req.headers._idsub);
+    userDaoImpl.addSubscribers(req, function(dbUser){
+       if(dbUser){
+            res.status(200)
+               .send(response.responseJson(true, "put requests", hateoas.link("home", {})));           
+       }else next(new Error('user do no exist abonnements.'));
+    });
+    
+});
+
 module.exports = router;
