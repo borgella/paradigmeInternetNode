@@ -48,40 +48,40 @@ module.exports.postTweet = function (req, callback) {
         });
 }
 
-module.exports.getTweets = function(req,callback){
-   User.findOne({_id: stringToObectId(req.headers._id) }, function(err, dbUser){
-       if(err)
+module.exports.getTweets = function (req, callback) {
+    User.findOne({ _id: stringToObectId(req.headers._id) }, function (err, dbUser) {
+        if (err)
             return callback(err);
         else
             return callback(dbUser.tweets.reverse());
-   });
+    });
 }
 
-module.exports.deleteTweet = function(req, callback){
-    User.findOneAndUpdate({_id: stringToObectId(req.headers._id)}, 
-        {$pull: {tweets: {_id: stringToObectId(req.headers._idtweet)} } }, 
-        function(err, dbUser){
-            if(err)
+module.exports.deleteTweet = function (req, callback) {
+    User.findOneAndUpdate({ _id: stringToObectId(req.headers._id) },
+        { $pull: { tweets: { _id: stringToObectId(req.headers._idtweet) } } },
+        function (err, dbUser) {
+            if (err)
                 return callback(err);
             else
                 return callback(dbUser.tweets);
-        });
+            });
 }
 
 module.exports.addSubscribers = function(req, callback){
-    User.findOneAndUpdate({_id: stringToObectId(req.headers._id) }, 
-        {$push: {subscribers: stringToObectId(req.headers._idsub) } },
-        function(err, dbUser){
-            if(err)
+    User.findOneAndUpdate({ _id: stringToObectId(req.headers._id) },
+        { $push: { subscribers: stringToObectId(req.headers._idsub) } },
+        function (err, dbUser) {
+            if (err)
                 return callback(err);
             else
                 return callback(dbUser);
         });
 }
 
-module.exports.addFollowers = function(req, callback){
-     User.findOneAndUpdate({_id: stringToObectId(req.headers._idsub) }, 
-         {$push: {followers: stringToObectId(req.headers._id) } },
+xports.addFollowers = function(req, callback){
+    User.findOneAndUpdate({_id: stringToObectId(req.headers._idsub) }, 
+     { followers:  stringToObectId(req.headers._id) } },  
          function(err, dbUser){
               if(err)
                   return callback(err);
