@@ -48,6 +48,26 @@ module.exports.postTweet = function (req, callback) {
         });
 }
 
+module.exports.getTweets = function(req,callback){
+   User.findOne({_id: stringToObectId(req.headers._id) }, function(err, dbUser){
+       if(err)
+            return callback(err);
+        else
+            return callback(dbUser.tweets.reverse());
+   });
+}
+
+module.exports.deleteTweet = function(req, callback){
+    User.findOneAndUpdate({_id: stringToObectId(req.headers._id)}, 
+        {$pull: {tweets: {_id: stringToObectId(req.headers._idtweet)} } }, 
+        function(err, dbUser){
+            if(err)
+                return callback(err);
+            else
+                return callback(dbUser.tweets);
+    });
+}
+
 function stringToObectId(a_string) {
     return new mongoose.mongo.ObjectId(a_string);
 }

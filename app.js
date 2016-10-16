@@ -39,7 +39,7 @@ app.use('/utilisateurs', utilisateurs);
 
 // MiddleWare to catch 404 error when request ressource does not exist
 app.use(function (req, res, next) {
-  var err = new Error();
+  var err = new Error('Ressource do not exist.');
   err.status = 404;
   res.status(404).send(response.responseJson(false, err.message, hateoas.link("home", {})));
 });
