@@ -42,7 +42,7 @@ var UserSchema = mongoose.Schema({
         unique: true,
         require: [true, 'The email adress is required.'],
         isEmail: {
-            message: 'You should provide a valid email adress format.'
+            message: 'You should provide a valid email adress format : jhondoe@exemple.com'
         }
     },
 
