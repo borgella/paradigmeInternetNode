@@ -49,33 +49,51 @@ router.delete('/tweet', function(req, res, next){
 
 router.put('/abonnements',beforeSubscribeUser, function(req, res, next){
     userDaoImpl.addSubscribers(req, function(dbUser){
-        userDaoImpl.addFollowers(req, function(subscriber){
-            res.status(200)
-               .send(response.responseJson(true, req.body.subscriber, hateoas.link("home", {}))); 
-        });
+        if(dbUser){
+            userDaoImpl.addFollowers(req, function(subscriber){
+                res.status(200)
+                   .send(response.responseJson(true, req.body.subscriber, hateoas.link("home", {}))); 
+            });     
+        } else next(new Error('something went wrong with the database, sorry comeback later'));  
     });
 });
 
+router.delete('/abonnements', beforeDeleteUser, function(req, res, next){
+    userDaoImpl.deleteSubscriber(req, function(followers){
+        if(followers){
+            res.status(200)
+               .send(response.responseJson(true, req.body.subscribers, hateoas.link("home", {})));              
+        }else next(new Error('something went wrong with the database, sorry comeback later'));  
+    }); 
+});
+
 function beforeSubscribeUser(req, res, next){
-    userDaoImpl.userIsNotSubscribeYet(req, function(value){
+    userDaoImpl.isUserSubscribeYet(req, function(value){
         console.log("THE VALUE = " + value);
         if(value === -1){
             userDaoImpl.findUserById(req.headers._idsub, function(subscriber){
                 if(subscriber){
                     req.body.subscriber = subscriber;
                     next();
-            
-                 }else next(new Error('subscriber fucked up.'));
+                 }else next(new Error('subscriber does not exist '));
              }); 
         
         }else next(new Error('something wrong happen can not subscribe to this user'));
     });
 }
 
-function addFollower(req, res, next){
-    userDaoImpl.addFollowers(req, function(userFollowed){
-       next();
-    }); 
+function beforeDeleteUser(req, res, next){
+    userDaoImpl.isUserSubscribeYet(req, function(value){
+        if(value >= 0){
+            userDaoImpl.unsubscribeUser(req, function(subscribers){
+                if(subscribers){
+                    req.body.subscribers = subscribers;
+                    next();
+                
+                } else next(new Error('something went wrong with the database, sorry comeback later'));  
+            });
+        }else next(new Error(' you can not delete this user, you are not his followers '));
+    });
 }
 
 module.exports = router;

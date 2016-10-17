@@ -90,7 +90,29 @@ module.exports.addFollowers = function(req, callback){
      });
 }
 
-module.exports.userIsNotSubscribeYet = function(req, callback){
+module.exports.unsubscribeUser = function(req, callback){
+    User.findOneAndUpdate({_id: stringToObectId(req.headers._id) }, 
+    {$pull: {subscribers : stringToObectId(req.headers._idsub) } },
+    function(err, dbUser){
+        if(err)
+            return callback(err);
+        else
+            return callback(dbUser.subscribers);
+    });
+}
+
+module.exports.deleteSubscriber = function(req, callback){
+    User.findOneAndUpdate({_id: stringToObectId(req.headers._idsub)},
+    {$pull: {followers: stringToObectId(req.headers._id) } }, 
+    function(err, dbUser){
+        if(err)
+            return callback(err);
+        else
+            return callback(dbUser.followers);
+    });
+}
+
+module.exports.isUserSubscribeYet = function(req, callback){
     User.findOne({_id: stringToObectId(req.headers._id) }, function(err, dbUser){
        if(dbUser)
             return callback(dbUser.subscribers.indexOf(stringToObectId(req.headers._idsub)));
