@@ -69,7 +69,6 @@ router.delete('/abonnements', beforeDeleteUser, function(req, res, next){
 
 function beforeSubscribeUser(req, res, next){
     userDaoImpl.isUserSubscribeYet(req, function(value){
-        console.log("THE VALUE = " + value);
         if(value === -1){
             userDaoImpl.findUserById(req.headers._idsub, function(subscriber){
                 if(subscriber){
@@ -78,7 +77,7 @@ function beforeSubscribeUser(req, res, next){
                  }else next(new Error('subscriber does not exist '));
              }); 
         
-        }else next(new Error('something wrong happen can not subscribe to this user'));
+        }else next(new Error('you are already subscribe to this user'));
     });
 }
 
