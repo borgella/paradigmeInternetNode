@@ -5,10 +5,10 @@ var objectId = Schema.ObjectId;
 var User = require('../model/user');
 
 module.exports.saveInDataBase = function (req, res, next) {
-    req.body.save(function (error) {
-        if (error) {
+    req.body.save(function (err) {
+        if (err) {
             res.status(404);
-            if (error.code === 11000)
+            if (err.code === 11000)
                 next(new Error('This address email is already taking.'));
             else
                 next(new Error('Database error connection, the document could not be save.'));
@@ -17,17 +17,17 @@ module.exports.saveInDataBase = function (req, res, next) {
     });
 }
 
-module.exports.findUserByEmail = function (req, callback) {
-    User.findOne({ email: req.body.email }, function (error, dbUser) {
-        if (error)
-            return callback(error);
+module.exports.findUserByEmail = function (_email, callback) {
+    User.findOne({ email: _email }, function (err, dbUser) {
+        if (err)
+            return callback(err);
         else
             return callback(dbUser);
     });
 }
 
-module.exports.findUserById = function (req, callback) {
-    User.findOne({ _id: stringToObectId(req.headers._id) }, function (err, dbUser) {
+module.exports.findUserById = function (_id, callback) {
+    User.findOne({ _id: stringToObectId(_id) }, function (err, dbUser) {
         if (err)
             return callback(err);
         else
@@ -79,23 +79,23 @@ module.exports.addSubscribers = function(req, callback){
         });
 }
 
-xports.addFollowers = function(req, callback){
+module.exports.addFollowers = function(req, callback){
     User.findOneAndUpdate({_id: stringToObectId(req.headers._idsub) }, 
-     { followers:  stringToObectId(req.headers._id) } },  
+     {$push: { followers: stringToObectId(req.headers._id) } },  
          function(err, dbUser){
-              if(err)
-                  return callback(err);
-              else
+              if(dbUser)
                   return callback(dbUser);
+              else
+                  return callback(err);
      });
 }
 
 module.exports.userIsNotSubscribeYet = function(req, callback){
     User.findOne({_id: stringToObectId(req.headers._id) }, function(err, dbUser){
-       if(err)
-            return callback(err);
-        else           
+       if(dbUser)
             return callback(dbUser.subscribers.indexOf(stringToObectId(req.headers._idsub)));
+        else           
+            return callback(err);
     });
     
 }

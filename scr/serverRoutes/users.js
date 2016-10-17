@@ -21,7 +21,7 @@ router.get('/logout', function (req, res, next) {
 
 function findTheUser(req, res, next) {
     console.log(req.headers['x-access-token']);
-    userDaoImpl.findUserByEmail(req, function (dbUser) {
+    userDaoImpl.findUserByEmail(req.body.email, function (dbUser) {
         if (dbUser) {
             util.compareHash(req.body.password, dbUser.password, function (response) {
                 if (response) {
