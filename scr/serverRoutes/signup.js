@@ -22,7 +22,7 @@ function beforeSignup(req, res, next) {
             if (error) {
                 next(error);
             } else {
-                util.generateToken(req.body.email, function (tokens) {
+                util.generateToken(req.body.email, function (error, tokens) {
                     if (tokens) {
                         var token = { id: req.body._id, token: tokens };
                         req.body.token = token;
@@ -35,7 +35,7 @@ function beforeSignup(req, res, next) {
 }
 
 function saveUser(req, res, next) {
-    util.generateSaltHash(req.body.password, function (hash) {
+    util.generateSaltHash(req.body.password, function (error, hash) {
         if (hash) {
             req.body.password = hash;
             userDaoImpl.saveInDataBase(req, res, next);

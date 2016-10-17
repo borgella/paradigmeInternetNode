@@ -20,9 +20,9 @@ module.exports.saveInDataBase = function (req, res, next) {
 module.exports.findUserByEmail = function (_email, callback) {
     User.findOne({ email: _email }, function (err, dbUser) {
         if (err)
-            return callback(err);
+            return callback(err, null);
         else
-            return callback(dbUser);
+            return callback(null, dbUser);
     });
 }
 
