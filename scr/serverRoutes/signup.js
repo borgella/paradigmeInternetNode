@@ -23,7 +23,7 @@ function beforeSignup(req, res, next) {
                 next(error);
             } else {
                 util.generateToken(req.body.email, function (tokens) {
-                    if(tokens){
+                    if (tokens) {
                         var token = { id: req.body._id, token: tokens };
                         req.body.token = token;
                         next();
