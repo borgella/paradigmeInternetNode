@@ -23,12 +23,14 @@ function findTheUser(req, res, next) {
     console.log(req.headers['x-access-token']);
     userDaoImpl.findUserByEmail(req.body.email, function (error, dbUser) {
         if (dbUser) {
-            util.compareHash(req.body.password, dbUser.password, function (response) {
+            util.compareHash(req.body.password, dbUser.password, function (error, response) {
                 if (response) {
                     req.body = dbUser;
-                    util.generateToken(req.body.email, function (token) {
-                        req.body.token = token;
-                        next();
+                    util.generateToken(req.body.email, function (error, token) {
+                        if(token){
+                            req.body.token = token;
+                            next();
+                        } else next(new Error("server internal error."));
                     });
                 } else next(new Error("The password you entered did not match with our database."));
             });

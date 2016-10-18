@@ -16,9 +16,9 @@ module.exports.generateSaltHash = function (value, callback) {
 module.exports.compareHash = function (value, hash, callback) {
     bcrypt.compare(value, hash, function (error, response) {
         if (error)
-            return callback(error);
+            return callback(error, null);
         else
-            return callback(response);
+            return callback(null, response);
     });
 }
 
