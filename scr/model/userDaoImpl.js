@@ -2,7 +2,8 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 var objectId = Schema.ObjectId;
-var User = require('../model/user');
+var User = require('./user');
+var util = require('../../service/util');
 
 module.exports.saveInDataBase = function (req, res, next) {
     req.body.save(function (err) {
@@ -27,7 +28,7 @@ module.exports.findUserByEmail = function (_email, callback) {
 }
 
 module.exports.findUserById = function (_id, callback) {
-    User.findOne({ _id: stringToObectId(_id) }, function (err, dbUser) {
+    User.findOne({ _id: util.stringToObectId(_id) }, function (err, dbUser) {
         if (err)
             return callback(err, null);
         else
@@ -37,8 +38,8 @@ module.exports.findUserById = function (_id, callback) {
 }
 
 module.exports.postTweet = function (req, callback) {
-    req.body.tweet = { _id: generateMongooseId(), date: new Date(), tweet: req.body.text };
-    User.findOneAndUpdate({ _id: stringToObectId(req.headers._id) },
+    req.body.tweet = { _id: util.generateMongooseId(), date: new Date(), tweet: req.body.text };
+    User.findOneAndUpdate({ _id: util.stringToObectId(req.headers._id) },
         { $push: { tweets: req.body.tweet } },
         function (err, dbUser) {
             if (err)
@@ -49,28 +50,28 @@ module.exports.postTweet = function (req, callback) {
 }
 
 module.exports.getTweets = function (req, callback) {
-    User.findOne({ _id: stringToObectId(req.headers._id) }, function (err, dbUser) {
+    User.findOne({ _id: util.stringToObectId(req.headers._id) }, function (err, dbUser) {
         if (err)
             return callback(err, null);
         else
-            return callback(null, dbUser.tweets.reverse());
+            return callback(null, dbUser);
     });
 }
 
 module.exports.deleteTweet = function (req, callback) {
-    User.findOneAndUpdate({ _id: stringToObectId(req.headers._id) },
-        { $pull: { tweets: { _id: stringToObectId(req.headers._idtweet) } } },
+    User.findOneAndUpdate({ _id: util.stringToObectId(req.headers._id) },
+        { $pull: { tweets: { _id: util.stringToObectId(req.headers._idtweet) } } },
         function (err, dbUser) {
             if (err)
                 return callback(err, null);
             else
-                return callback(null, dbUser.tweets);
+                return callback(null, dbUser);
             });
 }
 
 module.exports.addSubscribers = function(req, callback){
-    User.findOneAndUpdate({ _id: stringToObectId(req.headers._id) },
-        { $push: { subscribers: stringToObectId(req.headers._idsub) } },
+    User.findOneAndUpdate({ _id: util.stringToObectId(req.headers._id) },
+        { $push: { subscribers: util.stringToObectId(req.headers._idsub) } },
         function (err, dbUser) {
             if (err)
                 return callback(err, null);
@@ -80,8 +81,8 @@ module.exports.addSubscribers = function(req, callback){
 }
 
 module.exports.addFollowers = function(req, callback){
-    User.findOneAndUpdate({_id: stringToObectId(req.headers._idsub) }, 
-     {$push: { followers: stringToObectId(req.headers._id) } },  
+    User.findOneAndUpdate({_id: util.stringToObectId(req.headers._idsub) }, 
+     {$push: { followers: util.stringToObectId(req.headers._id) } },  
          function(err, dbUser){
               if(err)
                   return callback(err, null);
@@ -91,44 +92,36 @@ module.exports.addFollowers = function(req, callback){
 }
 
 module.exports.deleteSubscriber = function(req, callback){
-    User.findOneAndUpdate({_id: stringToObectId(req.headers._idsub)},
-    {$pull: {followers: stringToObectId(req.headers._id) } }, 
+    User.findOneAndUpdate({_id: util.stringToObectId(req.headers._idsub)},
+    {$pull: {followers: util.stringToObectId(req.headers._id) } }, 
     function(err, dbUser){
         if(err)
             return callback(err, null);
         else
-            return callback(null, dbUser.followers);
+            return callback(null, dbUser);
     });
 }
 
 module.exports.unsubscribeUser = function(req, callback){
-    User.findOneAndUpdate({_id: stringToObectId(req.headers._id) }, 
-    {$pull: {subscribers : stringToObectId(req.headers._idsub) } },
+    User.findOneAndUpdate({_id: util.stringToObectId(req.headers._id) }, 
+    {$pull: {subscribers : util.stringToObectId(req.headers._idsub) } },
     function(err, dbUser){
         if(err)
             return callback(err, null);
         else
-            return callback(null, dbUser.subscribers);
+            return callback(null, dbUser);
     });
 }
 
 
 
-module.exports.isUserSubscribeYet = function(req, callback){
-    User.findOne({_id: stringToObectId(req.headers._id) }, function(err, dbUser){
+module.exports.isUserHasAnAccount = function(req, callback){
+    User.findOne({_id: util.stringToObectId(req.headers._id) }, function(err, dbUser){
        if(err)
           return callback(err, null);
        else           
-          return callback(null, dbUser.subscribers.indexOf(stringToObectId(req.headers._idsub)));
+          return callback(null, dbUser);
     });
     
-}
-
-function stringToObectId(a_string) {
-    return new mongoose.mongo.ObjectId(a_string);
-}
-
-function generateMongooseId() {
-    return mongoose.Types.ObjectId();
 }
 

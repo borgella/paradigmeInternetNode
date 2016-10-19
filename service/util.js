@@ -3,6 +3,7 @@
 var bcrypt = require('bcrypt');
 var environnement = require("../configuration/environnement");
 var jwt = require('jsonwebtoken');
+var mongoose = require('mongoose');
 
 module.exports.generateSaltHash = function (value, callback) {
     bcrypt.hash(value, 10, function (err, hash) {
@@ -38,4 +39,12 @@ module.exports.decodeToken = function (token, callback) {
         else
             return callback(decoded.email);
     });
+}
+
+module.exports.stringToObectId = function (a_string) {
+    return new mongoose.mongo.ObjectId(a_string);
+}
+
+module.exports.generateMongooseId = function () {
+    return mongoose.Types.ObjectId();
 }

@@ -28,9 +28,9 @@ router.post('/tweet', function (req, res, next) {
 });
 
 router.get('/tweets', function(req, res, next){
-    userDaoImpl.getTweets(req, function(error, tweets){
-       if(tweets){
-           req.body.tweets = tweets;
+    userDaoImpl.getTweets(req, function(error, dbUser){
+       if(dbUser){
+           req.body.tweets = dbUser.tweets.reverse();
             res.status(200)
                .send(response.responseJson(true, req.body.tweets, hateoas.link("home", {})));
          }else next(new Error('user does not exist'));
@@ -38,9 +38,9 @@ router.get('/tweets', function(req, res, next){
 });
 
 router.delete('/tweet', function(req, res, next){
-    userDaoImpl.deleteTweet(req, function(error, tweets){
-        if(tweets){
-            req.body.tweets = tweets;
+    userDaoImpl.deleteTweet(req, function(error, dbUser){
+        if(dbUser){
+            req.body.tweets = dbUser.tweets;
             res.status(200)
                .send(response.responseJson(true, req.body.tweets, hateoas.link("home", {})));
         }else next(new Error('user does not exist'))
@@ -61,8 +61,8 @@ router.put('/abonnements',beforeSubscribeUser, function(req, res, next){
 });
 
 router.delete('/abonnements', beforeDeleteUser, function(req, res, next){
-    userDaoImpl.deleteSubscriber(req, function(followers){
-        if(followers){
+    userDaoImpl.deleteSubscriber(req, function(error, dbUser){
+        if(dbUser){
             res.status(200)
                .send(response.responseJson(true, req.body.subscribers, hateoas.link("home", {})));              
         }else next(new Error('something went wrong with the database, sorry comeback later'));  
@@ -70,30 +70,32 @@ router.delete('/abonnements', beforeDeleteUser, function(req, res, next){
 });
 
 function beforeSubscribeUser(req, res, next){
-    userDaoImpl.isUserSubscribeYet(req, function(error, value){
-        if(value === -1){
-            userDaoImpl.findUserById(req.headers._idsub, function(error, subscriber){
-                if(subscriber){
-                    req.body.subscriber = subscriber;
-                    next();
-                 }else next(new Error('subscriber does not exist '));
-             }); 
-        
-        }else next(new Error('you are already subscribe to this user'));
+    userDaoImpl.isUserHasAnAccount(req, function(error, dbUser){
+        if(dbUser){
+            if(dbUser.subscribers.indexOf(util.stringToObectId(req.headers._idsub)) === -1){
+                    userDaoImpl.findUserById(req.headers._idsub, function(error, subscriber){
+                        if(subscriber){
+                               req.body.subscriber = subscriber;
+                               next();
+                        }else next(new Error('subscriber does not exist '));
+                    }); 
+            }else next(new Error('you are already subscribe to this user'));
+            
+        } else next(new Error('user does not exist'));
     });
 }
 
 function beforeDeleteUser(req, res, next){
-    userDaoImpl.isUserSubscribeYet(req, function(error, value){
-        if(value >= 0){
-            userDaoImpl.unsubscribeUser(req, function(error, subscribers){
-                if(subscribers){
-                    req.body.subscribers = subscribers;
-                    next();
-                
-                } else next(new Error('something went wrong with the database, sorry comeback later'));  
-            });
-        }else next(new Error(' you can not delete this user, you are not his followers '));
+    userDaoImpl.isUserHasAnAccount(req, function(error, dbUser){
+        if(dbUser){
+            if(dbUser.subscribers.indexOf(util.stringToObectId(req.headers._idsub)) >= 0){
+                    userDaoImpl.unsubscribeUser(req, function(error, dbUser){
+                        req.body.subscribers = dbUser.subscribers;
+                        next();
+                    });
+            }else next(new Error(' you can not delete this user, you are not his followers '));
+        
+        } else next (new Error('user does not exist'));
     });
 }
 
