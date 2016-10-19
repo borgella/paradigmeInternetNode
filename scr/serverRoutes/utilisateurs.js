@@ -8,7 +8,7 @@ var util = require('../../service/util');
 var userDaoImpl = require('../model/userDaoImpl');
 
 router.get('/fil', function (req, res, next) {
-    userDaoImpl.findUserById(req.headers._id, function (dbUser) {
+    userDaoImpl.findUserById(req.headers._id, function (error, dbUser) {
         if (dbUser) {
             res.status(200)
                .send(response.responseJson(true, "Utilisateur requests", hateoas.link("home", {})));
@@ -18,7 +18,7 @@ router.get('/fil', function (req, res, next) {
 
 router.post('/tweet', function (req, res, next) {
     if(req.body.text.length <= 140){
-         userDaoImpl.postTweet(req, function (dbUser) {
+         userDaoImpl.postTweet(req, function (error, dbUser) {
             if (dbUser) {
                 res.status(200)
                    .send(response.responseJson(true, req.body.tweet, hateoas.link("home", {})));
@@ -28,7 +28,7 @@ router.post('/tweet', function (req, res, next) {
 });
 
 router.get('/tweets', function(req, res, next){
-    userDaoImpl.getTweets(req, function(tweets){
+    userDaoImpl.getTweets(req, function(error, tweets){
        if(tweets){
            req.body.tweets = tweets;
             res.status(200)
@@ -38,7 +38,7 @@ router.get('/tweets', function(req, res, next){
 });
 
 router.delete('/tweet', function(req, res, next){
-    userDaoImpl.deleteTweet(req, function(tweets){
+    userDaoImpl.deleteTweet(req, function(error, tweets){
         if(tweets){
             req.body.tweets = tweets;
             res.status(200)
@@ -48,11 +48,13 @@ router.delete('/tweet', function(req, res, next){
 });
 
 router.put('/abonnements',beforeSubscribeUser, function(req, res, next){
-    userDaoImpl.addSubscribers(req, function(dbUser){
+    userDaoImpl.addSubscribers(req, function(error, dbUser){
         if(dbUser){
-            userDaoImpl.addFollowers(req, function(subscriber){
-                res.status(200)
-                   .send(response.responseJson(true, req.body.subscriber, hateoas.link("home", {}))); 
+            userDaoImpl.addFollowers(req, function(error, subscriber){
+                if(subscriber)
+                    res.status(200)
+                        .send(response.responseJson(true, req.body.subscriber, hateoas.link("home", {}))); 
+                else next(new Error('something went wrong with the database, sorry comeback later')); 
             });     
         } else next(new Error('something went wrong with the database, sorry comeback later'));  
     });
@@ -68,9 +70,9 @@ router.delete('/abonnements', beforeDeleteUser, function(req, res, next){
 });
 
 function beforeSubscribeUser(req, res, next){
-    userDaoImpl.isUserSubscribeYet(req, function(value){
+    userDaoImpl.isUserSubscribeYet(req, function(error, value){
         if(value === -1){
-            userDaoImpl.findUserById(req.headers._idsub, function(subscriber){
+            userDaoImpl.findUserById(req.headers._idsub, function(error, subscriber){
                 if(subscriber){
                     req.body.subscriber = subscriber;
                     next();
@@ -82,9 +84,9 @@ function beforeSubscribeUser(req, res, next){
 }
 
 function beforeDeleteUser(req, res, next){
-    userDaoImpl.isUserSubscribeYet(req, function(value){
+    userDaoImpl.isUserSubscribeYet(req, function(error, value){
         if(value >= 0){
-            userDaoImpl.unsubscribeUser(req, function(subscribers){
+            userDaoImpl.unsubscribeUser(req, function(error, subscribers){
                 if(subscribers){
                     req.body.subscribers = subscribers;
                     next();

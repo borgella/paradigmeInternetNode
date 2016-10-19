@@ -29,9 +29,9 @@ module.exports.findUserByEmail = function (_email, callback) {
 module.exports.findUserById = function (_id, callback) {
     User.findOne({ _id: stringToObectId(_id) }, function (err, dbUser) {
         if (err)
-            return callback(err);
+            return callback(err, null);
         else
-            return callback(dbUser);
+            return callback(null, dbUser);
     });
 
 }
@@ -42,18 +42,18 @@ module.exports.postTweet = function (req, callback) {
         { $push: { tweets: req.body.tweet } },
         function (err, dbUser) {
             if (err)
-                return callback(err);
+                return callback(err, null);
             else
-                return callback(dbUser);
+                return callback(null, dbUser);
         });
 }
 
 module.exports.getTweets = function (req, callback) {
     User.findOne({ _id: stringToObectId(req.headers._id) }, function (err, dbUser) {
         if (err)
-            return callback(err);
+            return callback(err, null);
         else
-            return callback(dbUser.tweets.reverse());
+            return callback(null, dbUser.tweets.reverse());
     });
 }
 
@@ -62,9 +62,9 @@ module.exports.deleteTweet = function (req, callback) {
         { $pull: { tweets: { _id: stringToObectId(req.headers._idtweet) } } },
         function (err, dbUser) {
             if (err)
-                return callback(err);
+                return callback(err, null);
             else
-                return callback(dbUser.tweets);
+                return callback(null, dbUser.tweets);
             });
 }
 
@@ -73,9 +73,9 @@ module.exports.addSubscribers = function(req, callback){
         { $push: { subscribers: stringToObectId(req.headers._idsub) } },
         function (err, dbUser) {
             if (err)
-                return callback(err);
+                return callback(err, null);
             else
-                return callback(dbUser);
+                return callback(null, dbUser);
         });
 }
 
@@ -83,22 +83,11 @@ module.exports.addFollowers = function(req, callback){
     User.findOneAndUpdate({_id: stringToObectId(req.headers._idsub) }, 
      {$push: { followers: stringToObectId(req.headers._id) } },  
          function(err, dbUser){
-              if(dbUser)
-                  return callback(dbUser);
+              if(err)
+                  return callback(err, null);
               else
-                  return callback(err);
+                  return callback(null, dbUser);
      });
-}
-
-module.exports.unsubscribeUser = function(req, callback){
-    User.findOneAndUpdate({_id: stringToObectId(req.headers._id) }, 
-    {$pull: {subscribers : stringToObectId(req.headers._idsub) } },
-    function(err, dbUser){
-        if(err)
-            return callback(err);
-        else
-            return callback(dbUser.subscribers);
-    });
 }
 
 module.exports.deleteSubscriber = function(req, callback){
@@ -106,18 +95,31 @@ module.exports.deleteSubscriber = function(req, callback){
     {$pull: {followers: stringToObectId(req.headers._id) } }, 
     function(err, dbUser){
         if(err)
-            return callback(err);
+            return callback(err, null);
         else
-            return callback(dbUser.followers);
+            return callback(null, dbUser.followers);
     });
 }
 
+module.exports.unsubscribeUser = function(req, callback){
+    User.findOneAndUpdate({_id: stringToObectId(req.headers._id) }, 
+    {$pull: {subscribers : stringToObectId(req.headers._idsub) } },
+    function(err, dbUser){
+        if(err)
+            return callback(err, null);
+        else
+            return callback(null, dbUser.subscribers);
+    });
+}
+
+
+
 module.exports.isUserSubscribeYet = function(req, callback){
     User.findOne({_id: stringToObectId(req.headers._id) }, function(err, dbUser){
-       if(dbUser)
-            return callback(dbUser.subscribers.indexOf(stringToObectId(req.headers._idsub)));
-        else           
-            return callback(err);
+       if(err)
+          return callback(err, null);
+       else           
+          return callback(null, dbUser.subscribers.indexOf(stringToObectId(req.headers._idsub)));
     });
     
 }
