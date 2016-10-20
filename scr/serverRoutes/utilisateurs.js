@@ -8,15 +8,10 @@ var util = require('../../service/util');
 var userDaoImpl = require('../model/userDaoImpl');
 
 router.get('/fil', createUserFeed,  function (req, res, next) {
-    userDaoImpl.findUserById(req.headers._id, function (error, dbUser) {
-        if (dbUser) {
-            var feed = {userTweets: dbUser.tweets.reverse(), subsTweets: req.body.tweetfeed.reverse(), 
-                        userRetweets: dbUser.retweets.reverse(), subsRetweets: req.body.retweetfeed.reverse()};
-             req.body.feed = feed;
-             res.status(200)
-                .send(response.responseJson(true, req.body.feed, hateoas.link("home", {})));
-        } else next(new Error('user does not exist'));
-    });
+    req.body.feed = {userTweets: req.body.dbUser.tweets.reverse(), subscibersTweets: req.body.tweetfeed.reverse(), 
+                        userRetweets: req.body.dbUser.retweets.reverse(), subscribersRetweets: req.body.retweetfeed.reverse()}; 
+     res.status(200)
+        .send(response.responseJson(true, req.body.feed, hateoas.link("home", {})));
 });
 
 router.post('/tweet', function (req, res, next) {
@@ -109,6 +104,7 @@ router.delete('/abonnements', beforeDeleteUser, function(req, res, next){
 function createUserFeed(req, res, next){
     userDaoImpl.isUserHasAnAccount(req, function(error, dbUser){
         if (dbUser) {
+            req.body.dbUser = dbUser;
             req.body.tweetfeed = [];
             req.body.retweetfeed = [];
             if(dbUser.subscribers.length){

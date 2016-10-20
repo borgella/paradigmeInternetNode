@@ -70,7 +70,8 @@ module.exports.deleteTweet = function (req, callback) {
 }
 
 module.exports.putRetweet = function(req, callback){
-    req.body.retweet = {_id: util.generateMongooseId(), date:req.body.retweet.date, tweet:req.body.retweet.tweet};
+    //always create an object with req.body.data before to save it in the Database
+    req.body.retweet = {_id: util.generateMongooseId(), date: req.body.retweet.date, tweet:req.body.retweet.tweet};
     User.findOneAndUpdate({_id: util.stringToObectId(req.headers._id) }, 
         {$push: {retweets :req.body.retweet } }, 
         function(err, dbUser){
