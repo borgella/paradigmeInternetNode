@@ -7,11 +7,14 @@ var hateoas = require('../../service/hateoas');
 var util = require('../../service/util');
 var userDaoImpl = require('../model/userDaoImpl');
 
-router.get('/fil', function (req, res, next) {
+router.get('/fil', createUserFeed,  function (req, res, next) {
     userDaoImpl.findUserById(req.headers._id, function (error, dbUser) {
         if (dbUser) {
-            res.status(200)
-               .send(response.responseJson(true, "Utilisateur requests", hateoas.link("home", {})));
+            var feed = {userTweets: dbUser.tweets.reverse(), subsTweets: req.body.tweetfeed.reverse(), 
+                        userRetweets: dbUser.retweets.reverse(), subsRetweets: req.body.retweetfeed.reverse()};
+             req.body.feed = feed;
+             res.status(200)
+                .send(response.responseJson(true, req.body.feed, hateoas.link("home", {})));
         } else next(new Error('user does not exist'));
     });
 });
@@ -43,8 +46,42 @@ router.delete('/tweet', function(req, res, next){
             req.body.tweets = dbUser.tweets;
             res.status(200)
                .send(response.responseJson(true, req.body.tweets, hateoas.link("home", {})));
-        }else next(new Error('user does not exist'))
+        }else next(new Error('user does not exist'));
     });
+});
+
+router.get('/retweets', function(req, res, next){
+    userDaoImpl.isUserHasAnAccount(req, function(error, dbUser){
+        if(dbUser){
+            req.body.retweets = dbUser.retweets;
+            res.status(200)
+                .send(response.responseJson(true, req.body.retweets, hateoas.link('home', {})));
+        }else next(new Error('user does not exist'));
+    })
+});
+
+router.put('/retweet', function(req, res, next){
+    userDaoImpl.putRetweet(req, function(error, dbUser){
+        if(dbUser){
+            res.status(200)
+               .send(response.responseJson(true, req.body.retweet, hateoas.link('home', {})));
+        }else next(new Error('user does not exist'));
+    });    
+});
+
+router.delete('/retweet', function(req, res, next){
+    userDaoImpl.deleteRetweet(req, function(error, dbUser){
+        if(dbUser){
+            req.body.retweets = dbUser.retweets;
+            res.status(200)
+               .send(response.responseJson(true, req.body.retweets, hateoas.link('home', {})));
+        }else next(new Error('user does not exist.'));
+    });
+});
+
+router.get('/abonnements',createUserFeedSubscribers, function(req, res, next){
+    res.status(200)
+       .send(response.responseJson(true, req.body.subscribersfeed, hateoas.link('home', {})));
 });
 
 router.put('/abonnements',beforeSubscribeUser, function(req, res, next){
@@ -68,6 +105,41 @@ router.delete('/abonnements', beforeDeleteUser, function(req, res, next){
         }else next(new Error('something went wrong with the database, sorry comeback later'));  
     }); 
 });
+
+function createUserFeed(req, res, next){
+    userDaoImpl.isUserHasAnAccount(req, function(error, dbUser){
+        if (dbUser) {
+            req.body.tweetfeed = [];
+            req.body.retweetfeed = [];
+            if(dbUser.subscribers.length){
+                dbUser.subscribers.forEach(function(subscriber) {
+                    userDaoImpl.findUserById(subscriber, function(error, user){
+                        req.body.tweetfeed.push(user.tweets.reverse());
+                        req.body.retweetfeed.push(user.retweets.reverse());
+                        next(); // tres important car ca permet d eviter un UNDEFINED pour l objet req.body.feed
+                    })
+                });
+            }
+            
+        } else next(new Error('user does not exist'));
+    });
+}
+
+function createUserFeedSubscribers(req, res, next){
+    userDaoImpl.isUserHasAnAccount(req, function(error, dbUser){
+        if(dbUser){
+           req.body.subscribersfeed = [];
+            if(dbUser.subscribers.length){
+                dbUser.subscribers.forEach(function(subscriber){
+                   userDaoImpl.findUserById(subscriber,function(error, user){
+                       req.body.subscribersfeed.push(user);
+                       next(); // tres important car ca permet d eviter un UNDEFINED pour l objet req.body.feed
+                   }); 
+                });
+            }
+        }else next(new Error(' user does not exist'));
+    });
+}
 
 function beforeSubscribeUser(req, res, next){
     userDaoImpl.isUserHasAnAccount(req, function(error, dbUser){

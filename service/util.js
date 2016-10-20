@@ -41,6 +41,10 @@ module.exports.decodeToken = function (token, callback) {
     });
 }
 
+module.exports.createSubcribersTweetsFeed = function(dbUser,subscriberArray, callback){
+    
+}
+
 module.exports.stringToObectId = function (a_string) {
     return new mongoose.mongo.ObjectId(a_string);
 }

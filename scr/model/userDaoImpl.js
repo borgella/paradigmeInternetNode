@@ -60,13 +60,37 @@ module.exports.getTweets = function (req, callback) {
 
 module.exports.deleteTweet = function (req, callback) {
     User.findOneAndUpdate({ _id: util.stringToObectId(req.headers._id) },
-        { $pull: { tweets: { _id: util.stringToObectId(req.headers._idtweet) } } },
+        {$pull: { tweets: {_id: util.stringToObectId(req.headers._idtweet)}} },
         function (err, dbUser) {
             if (err)
                 return callback(err, null);
             else
                 return callback(null, dbUser);
-            });
+    });
+}
+
+module.exports.putRetweet = function(req, callback){
+    req.body.retweet = {_id: util.generateMongooseId(), date:req.body.retweet.date, tweet:req.body.retweet.tweet};
+    User.findOneAndUpdate({_id: util.stringToObectId(req.headers._id) }, 
+        {$push: {retweets :req.body.retweet } }, 
+        function(err, dbUser){
+            if(err)
+                return callback(err, null);
+             else
+                return callback(null, dbUser);
+
+    });  
+}
+
+module.exports.deleteRetweet = function(req, callback){
+    User.findOneAndUpdate({_id: util.stringToObectId(req.headers._id)}, 
+         {$pull: { retweets:{_id: util.stringToObectId(req.headers._idretweet)}} }, 
+         function(err, dbUser){
+             if(err)
+                return callback(err, null);
+             else
+                return callback(null, dbUser);
+    });
 }
 
 module.exports.addSubscribers = function(req, callback){
@@ -91,17 +115,6 @@ module.exports.addFollowers = function(req, callback){
      });
 }
 
-module.exports.deleteSubscriber = function(req, callback){
-    User.findOneAndUpdate({_id: util.stringToObectId(req.headers._idsub)},
-    {$pull: {followers: util.stringToObectId(req.headers._id) } }, 
-    function(err, dbUser){
-        if(err)
-            return callback(err, null);
-        else
-            return callback(null, dbUser);
-    });
-}
-
 module.exports.unsubscribeUser = function(req, callback){
     User.findOneAndUpdate({_id: util.stringToObectId(req.headers._id) }, 
     {$pull: {subscribers : util.stringToObectId(req.headers._idsub) } },
@@ -112,8 +125,6 @@ module.exports.unsubscribeUser = function(req, callback){
             return callback(null, dbUser);
     });
 }
-
-
 
 module.exports.isUserHasAnAccount = function(req, callback){
     User.findOne({_id: util.stringToObectId(req.headers._id) }, function(err, dbUser){
