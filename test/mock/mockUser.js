@@ -12,12 +12,10 @@ module.exports.ValidUser = function () {
         retweets: [],
         subcribers: [],
         followers: []
-    }
+    };
 
 }
 
 module.exports.EmpyBody = function () {
-    return {
-
-    }
+    return {  };
 }

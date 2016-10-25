@@ -36,7 +36,7 @@ describe('User', function () {
                     done();
                 })
         });
-    });
+});
 
 
 
