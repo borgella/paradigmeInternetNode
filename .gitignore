@@ -1,7 +1,6 @@
 # git ignore 
 node_modules
 npm-debug.log
-test/
 .vscode/
 
 # environnement
