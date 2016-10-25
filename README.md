@@ -14,15 +14,16 @@
 
 **Architecture du projet**
 
-*Dans ce projet je me suis concentré seulement sur le Back-End du service et gardé aussi le style Architecturale MVC*
+*le Back-End du projet est réalisé avec le style Architecturale MVC*
 
 **Conception du projet et l'explication sur les différents packages**
 
-1. *Le package Model comprend l'objet Mongoose qui représente un utilisateur du système et un fichier qui permet l'implementation du patron DAO pour faciliter les reqêtes à la base données et qui est indépendant de la base de donnée utilisée.*
-2. *Le package serverRoutes comprend les différents routes qui sont implémentés par le serveur.*
-3. *Le package view comprend le format de réponse que le serveur envoit au client ce qui est du JSON cette fois.*
-4. *Le package service comprend les fonctions utilitaires proposés par le serveur comme le hashage du password, l'utilisation des tokens, la navigation des liens par Hateoas, et le service passport-facebook pour la connexion par les réseaux sociaux.*
-5. *Le package configuration contient la configuation du service et la methode de connexion à la base de données MongoDB via Mongoose.*
+1. *Le répertoire Model comprend l'objet Mongoose qui représente un utilisateur du système et un fichier qui permet l'implementation du patron DAO pour faciliter les reqêtes à la base données et qui est indépendant de la base de donnée utilisée.*
+2. *Le répertoire serverRoutes comprend les différents routes qui sont implémentés par le serveur.*
+3. *Le répertoire view comprend le format de réponse que le serveur envoit au client ce qui est du JSON cette fois.*
+4. *Le répertoire service comprend les fonctions utilitaires proposés par le serveur comme le hashage du password, l'utilisation des tokens, la navigation des liens par Hateoas, et le service passport-facebook pour la connexion par les réseaux sociaux.*
+5. *Le répertoire configuration contient la configuation du service et la methode de connexion à la base de données MongoDB via Mongoose.*
 6. *Le fichier app.js qui est le point d'entrée de l'application.*
+7. *Le répertoire test comprend l'implémentation des tests de quelques routes avec Mocha et Chai.*
 
 #### N'Hésitez pas à jeter un coup d'oeil sur le code pour plus de commentaire et d'explication supplémentaire ####
