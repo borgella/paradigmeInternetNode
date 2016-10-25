@@ -1,4 +1,4 @@
-## Projet d'étude pour le cours de paradigme des échanges internet INF4375 réalisé en Node JS
+#### Projet d'étude pour le cours de paradigme des échanges internet INF4375 réalisé en Node JS
 
 *Le but de ce projet est réadaptation du projet du cours INF4375 en Node.JS pour faciliter l'apprentisage de ce framewokr et appronfondir mes connaissances sur le langage de JavaScript. Comme pour le projet on a défini un API REST pour pouvoir communiquer avec notre serveur web. L'utilisation de MongoDB comme base de donnée no SQL est retenue ainsi que son Framework Mongoose. Contrairement au projet initial fait en Java, on a permis cette la gestion de la création d'un compte utilisateur est requis pour pouvoir utiliser l'application. Jettez un coup d'oeil sur le README du projet paradigmeInternetJAVA pour mieux comprendre le lien et la différence entre ces deux projets. Voici les actions possibles par un utilisateur du système.*
 
