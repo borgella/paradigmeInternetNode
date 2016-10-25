@@ -8,7 +8,7 @@ var mongoose = require('mongoose');
 module.exports.generateSaltHash = function (value, callback) {
     bcrypt.hash(value, 10, function (err, hash) {
         if (err)
-            return callback(error, null);
+            return callback(err, null);
         else
             return callback(null, hash);
     });
@@ -39,10 +39,6 @@ module.exports.decodeToken = function (token, callback) {
         else
             return callback(decoded.email);
     });
-}
-
-module.exports.createSubcribersTweetsFeed = function(dbUser,subscriberArray, callback){
-    
 }
 
 module.exports.stringToObectId = function (a_string) {
