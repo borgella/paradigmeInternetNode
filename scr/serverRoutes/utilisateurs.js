@@ -115,7 +115,7 @@ function createUserFeed(req, res, next){
                         next(); // tres important car ca permet d eviter un UNDEFINED pour l objet req.body.feed
                     })
                 });
-            }
+            }else next();
             
         } else next(new Error('user does not exist'));
     });
@@ -132,7 +132,7 @@ function createUserFeedSubscribers(req, res, next){
                        next(); // tres important car ca permet d eviter un UNDEFINED pour l objet req.body.feed
                    }); 
                 });
-            }
+            }else next();
         }else next(new Error(' user does not exist'));
     });
 }
