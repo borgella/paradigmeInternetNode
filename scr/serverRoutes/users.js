@@ -15,7 +15,7 @@ router.post('/login', findTheUser, function (req, res, next) {
 
 router.get('/logout', function (req, res, next) {
     res.status(200)
-        .send(response.responseJson(true, "bye see you next time.", hateoas.link("logout", {})));
+        .send(response.responseJson(true, "bye see you next time.", null, hateoas.link("logout", {})));
 });
 
 

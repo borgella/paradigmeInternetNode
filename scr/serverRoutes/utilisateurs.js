@@ -11,7 +11,7 @@ router.get('/fil/:_id', createUserFeed,  function (req, res, next) {
     req.body.feed = {userTweets: req.body.dbUser.tweets.reverse(), subscibersTweets: req.body.tweetfeed.reverse(), 
                         userRetweets: req.body.dbUser.retweets.reverse(), subscribersRetweets: req.body.retweetfeed.reverse()}; 
      res.status(200)
-        .send(response.responseJson(true, req.body.feed, hateoas.link("home", {})));
+        .send(response.responseJson(true, req.body.feed, null, hateoas.link("home", {})));
 });
 
 router.post('/tweet/:_id', function (req, res, next) {
@@ -19,7 +19,7 @@ router.post('/tweet/:_id', function (req, res, next) {
          userDaoImpl.postTweet(req, function (error, dbUser) {
             if (dbUser) {
                 res.status(200)
-                   .send(response.responseJson(true, req.body.tweet, hateoas.link("home", {})));
+                   .send(response.responseJson(true, req.body.tweet, null, hateoas.link("home", {})));
             } else next(new Error('user do not exist post'));
         });
     }else next (new Error('The length of your tweet should be less or equal to 140 characters.'));
@@ -30,7 +30,7 @@ router.get('/tweets/:_id', function(req, res, next){
        if(dbUser){
            req.body.tweets = dbUser.tweets.reverse();
             res.status(200)
-               .send(response.responseJson(true, req.body.tweets, hateoas.link("home", {})));
+               .send(response.responseJson(true, req.body.tweets,null, hateoas.link("home", {})));
          }else next(new Error('user does not exist'));
    });
 });
@@ -40,7 +40,7 @@ router.delete('/tweet/:_id/:_idtweet', function(req, res, next){
         if(dbUser){
             req.body.tweets = dbUser.tweets;
             res.status(200)
-               .send(response.responseJson(true, req.body.tweets, hateoas.link("home", {})));
+               .send(response.responseJson(true, req.body.tweets,null, hateoas.link("home", {})));
         }else next(new Error('user does not exist'));
     });
 });
@@ -50,7 +50,7 @@ router.get('/retweets/:_id', function(req, res, next){
         if(dbUser){
             req.body.retweets = dbUser.retweets;
             res.status(200)
-                .send(response.responseJson(true, req.body.retweets, hateoas.link('home', {})));
+                .send(response.responseJson(true, req.body.retweets,null, hateoas.link('home', {})));
         }else next(new Error('user does not exist'));
     })
 });
@@ -59,7 +59,7 @@ router.put('/retweet/:_id', function(req, res, next){
     userDaoImpl.putRetweet(req, function(error, dbUser){
         if(dbUser){
             res.status(200)
-               .send(response.responseJson(true, req.body.retweet, hateoas.link('home', {})));
+               .send(response.responseJson(true, req.body.retweet,null, hateoas.link('home', {})));
         }else next(new Error('user does not exist'));
     });    
 });
@@ -69,14 +69,14 @@ router.delete('/retweet/:_id/:_idretweet', function(req, res, next){
         if(dbUser){
             req.body.retweets = dbUser.retweets;
             res.status(200)
-               .send(response.responseJson(true, req.body.retweets, hateoas.link('home', {})));
+               .send(response.responseJson(true, req.body.retweets,null, hateoas.link('home', {})));
         }else next(new Error('user does not exist.'));
     });
 });
 
 router.get('/abonnements/:_id',createUserFeedSubscribers, function(req, res, next){
     res.status(200)
-       .send(response.responseJson(true, req.body.subscribersfeed, hateoas.link('home', {})));
+       .send(response.responseJson(true, req.body.subscribersfeed,null, hateoas.link('home', {})));
 });
 
 router.put('/abonnements/:_id/:_idsub',beforeSubscribeUser, function(req, res, next){
@@ -87,7 +87,7 @@ router.put('/abonnements/:_id/:_idsub',beforeSubscribeUser, function(req, res, n
                       userDaoImpl.addFollowers(req, function(error, subscriber){
                            if(subscriber)
                                 res.status(200)
-                                    .send(response.responseJson(true, req.body.subscriber, hateoas.link("home", {}))); 
+                                    .send(response.responseJson(true, req.body.subscriber,null, hateoas.link("home", {}))); 
                            else next(new Error('something went wrong with the database, sorry comeback later')); 
                         }); 
                  }else {
@@ -101,7 +101,7 @@ router.put('/abonnements/:_id/:_idsub',beforeSubscribeUser, function(req, res, n
 
 router.delete('/abonnements/:_id/:_idsub', beforeDeleteUser, function(req, res, next){
     res.status(200)
-        .send(response.responseJson(true, req.body.subscribers, hateoas.link("home", {})));    
+        .send(response.responseJson(true, req.body.subscribers,null, hateoas.link("home", {})));    
 });
 
 function createUserFeed(req, res, next){
