@@ -28,7 +28,7 @@ router.post('/tweet/:_id', function (req, res, next) {
 router.get('/tweets/:_id', function(req, res, next){
     userDaoImpl.getTweets(req, function(error, dbUser){
        if(dbUser){
-           req.body.tweets = dbUser.tweets.reverse();
+           req.body.tweets = dbUser.tweets;
             res.status(200)
                .send(response.responseJson(true, req.body.tweets,null, hateoas.link("home", {})));
          }else next(new Error('user does not exist'));
@@ -87,12 +87,12 @@ router.put('/abonnements/:_id/:_idsub',beforeSubscribeUser, function(req, res, n
                       userDaoImpl.addFollowers(req, function(error, subscriber){
                            if(subscriber)
                                 res.status(200)
-                                    .send(response.responseJson(true, req.body.subscriber,null, hateoas.link("home", {}))); 
+                                    .send(response.responseJson(true, req.body.subscriber, null, hateoas.link("home", {}))); 
                            else next(new Error('something went wrong with the database, sorry comeback later')); 
                         }); 
                  }else {
                      res.status(200)
-                        .send(response.responseJson(true, req.body.subscriber, hateoas.link("home", {}))); 
+                        .send(response.responseJson(true, req.body.subscriber, null, hateoas.link("home", {}))); 
                  }
             });     
         } else next(new Error('something went wrong with the database, sorry comeback later'));  
@@ -101,7 +101,7 @@ router.put('/abonnements/:_id/:_idsub',beforeSubscribeUser, function(req, res, n
 
 router.delete('/abonnements/:_id/:_idsub', beforeDeleteUser, function(req, res, next){
     res.status(200)
-        .send(response.responseJson(true, req.body.subscribers,null, hateoas.link("home", {})));    
+        .send(response.responseJson(true, req.body.subscribers, hateoas.link("home", {})));    
 });
 
 function createUserFeed(req, res, next){
@@ -115,7 +115,7 @@ function createUserFeed(req, res, next){
                     userDaoImpl.findUserById(subscriber, function(error, user){
                         req.body.tweetfeed.push(user.tweets.reverse());
                         req.body.retweetfeed.push(user.retweets.reverse());
-                        next(); // tres important car ca permet d eviter un UNDEFINED pour l objet req.body.feed
+                        next(); // tres important car ca permet d eviter un UNDEFINED pour l objet req.body.tweetfeed
                     })
                 });
             }else next();

@@ -28,12 +28,8 @@ app.use(cookieParser());
 //Connect to the dataBase
 app.use(require('./configuration/database').getDataBaseConnection);
 
-app.use(function(req,res,next){
-  res.header('Access-Control-Allow-Origin', "*");
-  res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
-  res.header('Access-Control-Allow-Headers', 'Content-Type');
-  next();
-});
+// Accept incoming 
+app.use(environnement.giveAccess);
 
 //The use of the routes
 app.use('/', index);

@@ -48,3 +48,16 @@ module.exports.stringToObectId = function (a_string) {
 module.exports.generateMongooseId = function () {
     return mongoose.Types.ObjectId();
 }
+
+module.exports.User = function(user){
+    return {
+        _id: user._id,
+        first_name: user.first_name,
+        last_name: user.last_name,
+        tweets: user.tweets,
+        retweets: user.retweets,
+        subscribers: user.subscribers,
+        followers: user.followers
+    }
+
+}
