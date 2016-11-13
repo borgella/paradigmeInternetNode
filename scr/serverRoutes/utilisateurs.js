@@ -104,7 +104,7 @@ router.delete('/abonnements/:_id/:_idsub', beforeDeleteUser, function (req, res,
         .send(response.responseJson(true, req.body.subscribers, null, hateoas.link("home", {})));
 });
 
-router.get('/users/:_id', function (req, res, next) {
+router.get('/suggestions/:_id', function (req, res, next) {
     //il faudrait créer un index pour plus de performance pour la recherche des suggestions.
     userDaoImpl.allAppUsers(req, function (error, appusers) {
         if (appusers) {
