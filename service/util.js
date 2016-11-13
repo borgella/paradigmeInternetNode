@@ -59,5 +59,13 @@ module.exports.User = function(user){
         subscribers: user.subscribers,
         followers: user.followers
     }
+}
 
+module.exports.reject = {
+   tweets: 0, 
+   retweets: 0, 
+   email: 0, 
+   password: 0, 
+   subscribers: 0, 
+   __v: 0
 }

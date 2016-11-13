@@ -137,3 +137,14 @@ module.exports.isUserHasAnAccount = function(req, callback){
     
 }
 
+module.exports.allAppUsers = function(req, callback){
+    User.find({_id: {$ne: util.stringToObectId(req.params._id)} }, util.reject,
+        function(err,appUsers){
+            if(err)
+                return callback(err, null);
+            else    
+                return callback(null, appUsers);
+        }
+    );    
+}
+
