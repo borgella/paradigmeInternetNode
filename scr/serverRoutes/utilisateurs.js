@@ -28,9 +28,8 @@ router.post('/tweet/:_id', function (req, res, next) {
 router.get('/tweets/:_id', function(req, res, next){
     userDaoImpl.getTweets(req, function(error, dbUser){
        if(dbUser){
-           req.body.tweets = dbUser.tweets;
             res.status(200)
-               .send(response.responseJson(true, req.body.tweets,null, hateoas.link("home", {})));
+               .send(response.responseJson(true, null,null, hateoas.link("home", {})));
          }else next(new Error('user does not exist'));
    });
 });
@@ -38,9 +37,8 @@ router.get('/tweets/:_id', function(req, res, next){
 router.delete('/tweet/:_id/:_idtweet', function(req, res, next){
     userDaoImpl.deleteTweet(req, function(error, dbUser){
         if(dbUser){
-            req.body.tweets = dbUser.tweets;
             res.status(200)
-               .send(response.responseJson(true, req.body.tweets,null, hateoas.link("home", {})));
+               .send(response.responseJson(true, null,null, hateoas.link("home", {})));
         }else next(new Error('user does not exist'));
     });
 });
