@@ -48,7 +48,7 @@ var UserSchema = mongoose.Schema({
 
     password: {
         type: String,
-        require: [true, 'You should provide a password if you are not stupid.'],
+        require: [true, 'You should provide a password.'],
         isAlphaNumeric: {
             message: 'Your password should contains alpha-numeric characters and at least one uppercase characters.'
         },

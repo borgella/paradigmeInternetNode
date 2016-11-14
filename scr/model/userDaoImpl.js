@@ -28,7 +28,7 @@ module.exports.findUserByEmail = function (_email, callback) {
 }
 
 module.exports.findUserById = function (_id, callback) {
-    User.findOne({ _id: util.stringToObectId(_id) }, function (err, dbUser) {
+    User.findOne({ _id: util.stringToObectId(_id)}, function (err, dbUser) {
         if (err)
             return callback(err, null);
         else
@@ -96,7 +96,7 @@ module.exports.deleteRetweet = function(req, callback){
 
 module.exports.addSubscribers = function(req, callback){
     User.findOneAndUpdate({ _id: util.stringToObectId(req.params._id) },
-        { $push: { subscribers: util.stringToObectId(req.params._idsub) } },
+        { $push: { subscribers: req.body.subscriber } },
         function (err, dbUser) {
             if (err)
                 return callback(err, null);

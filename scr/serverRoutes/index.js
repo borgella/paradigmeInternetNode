@@ -7,7 +7,7 @@ var passport = require('../../service/facebook');
 
 router.get('/', function (req, res, next) {
     res.status(200);
-    res.send(response.responseJson(true, "the home page", hateoas.link("home", {})));
+    res.send(response.responseJson(true, "the home page", null, hateoas.link("home", {})));
 });
 
 router.get('/auth/facebook', passport.authenticate('facebook'));

@@ -45,14 +45,14 @@ app.use(function (req, res, next) {
   var err = new Error('Ressource do not exist.');
   err.code = 404;
   res.status(404)
-     .send(response.responseJson(false, err.message, hateoas.link("home", {})));
+     .send(response.responseJson(false, err.message, null, hateoas.link("home", {})));
 });
 
 // MiddleWare to catch 500 internal error from the server
 app.use(function (err, req, res, next) {
   err.code = 500;
   res.status(500)
-     .send(response.responseJson(false, err.message, hateoas.link("home", {})));
+     .send(response.responseJson(false, err.message, null, hateoas.link("home", {})));
 });
 
 console.log('App is listening at port ' + app.listen(environnement.PORT, function () { }).address().port);
