@@ -140,11 +140,11 @@ module.exports.isUserHasAnAccount = function (req, callback) {
 
 module.exports.findSubscribers = function (req, callback) {
     User.find({ followers: util.stringToObjectId(req.params._id) },
-        function (err, dbUser) {
+        function (err, dbUsers) {
             if (err)
                 return callback(err, null);
             else
-                return callback(null, dbUser)
+                return callback(null, dbUsers)
         }
     );
 }
