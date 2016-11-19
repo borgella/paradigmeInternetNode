@@ -10,7 +10,7 @@ var jwt = require('jsonwebtoken');
 
 router.post('/login', findTheUser, function (req, res, next) {
     res.status(200)
-        .send(response.responseJson(true, util.User(req.body), req.body.token, hateoas.link("login", {})));
+        .send(response.responseJson(true, util.castUser(req.body.dbUser), req.body.token, hateoas.link("login", {})));
 });
 
 router.get('/logout', function (req, res, next) {
@@ -22,6 +22,7 @@ router.get('/logout', function (req, res, next) {
 function findTheUser(req, res, next) {
     userDaoImpl.findUserByEmail(req.body.email, function (error, dbUser) {
         if (dbUser) {
+            req.body.dbUser = dbUser;
             util.compareHash(req.body.password, dbUser.password, function (error, response) {
                 if (response) {
                     util.generateToken(req.body.email, function (error, token) {
