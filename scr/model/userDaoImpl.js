@@ -28,7 +28,7 @@ module.exports.findUserByEmail = function (_email, callback) {
 }
 
 module.exports.findUserById = function (_id, callback) {
-    User.findOne({ _id: util.stringToObectId(_id)}, function (err, dbUser) {
+    User.findOne({ _id: util.stringToObjectId(_id) }, function (err, dbUser) {
         if (err)
             return callback(err, null);
         else
@@ -39,7 +39,7 @@ module.exports.findUserById = function (_id, callback) {
 
 module.exports.postTweet = function (req, callback) {
     req.body.tweet = { _id: util.generateMongooseId(), date: new Date(), tweet: req.body.text };
-    User.findOneAndUpdate({ _id: util.stringToObectId(req.params._id) },
+    User.findOneAndUpdate({ _id: util.stringToObjectId(req.params._id) },
         { $push: { tweets: req.body.tweet } },
         function (err, dbUser) {
             if (err)
@@ -50,7 +50,7 @@ module.exports.postTweet = function (req, callback) {
 }
 
 module.exports.getTweets = function (req, callback) {
-    User.findOne({ _id: util.stringToObectId(req.params._id) }, function (err, dbUser) {
+    User.findOne({ _id: util.stringToObjectId(req.params._id) }, function (err, dbUser) {
         if (err)
             return callback(err, null);
         else
@@ -59,44 +59,8 @@ module.exports.getTweets = function (req, callback) {
 }
 
 module.exports.deleteTweet = function (req, callback) {
-    User.findOneAndUpdate({ _id: util.stringToObectId(req.params._id) },
-        {$pull: { tweets: {_id: util.stringToObectId(req.params._idtweet)}} },
-        function (err, dbUser) {
-            if (err)
-                return callback(err, null);
-            else
-                return callback(null, dbUser);
-    });
-}
-
-module.exports.putRetweet = function(req, callback){
-    //always create an object with req.body.data before to save it in the Database
-    req.body.retweet = {_id: util.generateMongooseId(), date: req.body.retweet.date, tweet:req.body.retweet.tweet};
-    User.findOneAndUpdate({_id: util.stringToObectId(req.params._id) }, 
-        {$push: {retweets :req.body.retweet } }, 
-        function(err, dbUser){
-            if(err)
-                return callback(err, null);
-             else
-                return callback(null, dbUser);
-
-    });  
-}
-
-module.exports.deleteRetweet = function(req, callback){
-    User.findOneAndUpdate({_id: util.stringToObectId(req.params._id)}, 
-         {$pull: { retweets:{_id: util.stringToObectId(req.params._idretweet)}} }, 
-         function(err, dbUser){
-             if(err)
-                return callback(err, null);
-             else
-                return callback(null, dbUser);
-    });
-}
-
-module.exports.addSubscribers = function(req, callback){
-    User.findOneAndUpdate({ _id: util.stringToObectId(req.params._id) },
-        { $push: { subscribers: req.body.subscriber } },
+    User.findOneAndUpdate({ _id: util.stringToObjectId(req.params._id) },
+        { $pull: { tweets: { _id: util.stringToObjectId(req.params._idtweet) } } },
         function (err, dbUser) {
             if (err)
                 return callback(err, null);
@@ -105,46 +69,97 @@ module.exports.addSubscribers = function(req, callback){
         });
 }
 
-module.exports.addFollowers = function(req, callback){
-    User.findOneAndUpdate({_id: util.stringToObectId(req.params._idsub) }, 
-     {$push: { followers: util.stringToObectId(req.params._id) } },  
-         function(err, dbUser){
-              if(err)
-                  return callback(err, null);
-              else
-                  return callback(null, dbUser);
-     });
-}
-
-module.exports.unsubscribeUser = function(req, callback){
-    User.findOneAndUpdate({_id: util.stringToObectId(req.params._id) }, 
-    {$pull: {subscribers : util.stringToObectId(req.params._idsub) } },
-    function(err, dbUser){
-        if(err)
-            return callback(err, null);
-        else
-            return callback(null, dbUser);
-    });
-}
-
-module.exports.isUserHasAnAccount = function(req, callback){
-    User.findOne({_id: util.stringToObectId(req.params._id) }, function(err, dbUser){
-       if(err)
-          return callback(err, null);
-       else           
-          return callback(null, dbUser);
-    });
-    
-}
-
-module.exports.allAppUsers = function(req, callback){
-    User.find({_id: {$ne: util.stringToObectId(req.params._id)} }, util.reject,
-        function(err,appUsers){
-            if(err)
+module.exports.putRetweet = function (req, callback) {
+    //always create an object with req.body.data before to save it in the Database
+    req.body.retweet = { _id: util.generateMongooseId(), date: req.body.retweet.date, tweet: req.body.retweet.tweet };
+    User.findOneAndUpdate({ _id: util.stringToObjectId(req.params._id) },
+        { $push: { retweets: req.body.retweet } },
+        function (err, dbUser) {
+            if (err)
                 return callback(err, null);
-            else    
+            else
+                return callback(null, dbUser);
+
+        });
+}
+
+module.exports.deleteRetweet = function (req, callback) {
+    User.findOneAndUpdate({ _id: util.stringToObjectId(req.params._id) },
+        { $pull: { retweets: { _id: util.stringToObjectId(req.params._idretweet) } } },
+        function (err, dbUser) {
+            if (err)
+                return callback(err, null);
+            else
+                return callback(null, dbUser);
+        });
+}
+
+module.exports.addSubscribers = function (req, callback) {
+    User.findOneAndUpdate({ _id: util.stringToObjectId(req.params._id) },
+        { $push: { subscribers: util.stringToObjectId(req.params._idsub) } },
+        function (err, dbUser) {
+            if (err)
+                return callback(err, null);
+            else
+                return callback(null, dbUser);
+        });
+}
+
+module.exports.addFollowers = function (req, callback) {
+    User.findOneAndUpdate({ _id: util.stringToObjectId(req.params._idsub) },
+        { $push: { followers: util.stringToObjectId(req.params._id) } },
+        function (err, dbUser) {
+            if (err)
+                return callback(err, null);
+            else
+                return callback(null, dbUser);
+        });
+}
+
+module.exports.unsubscribeUser = function (req, callback) {
+    User.findOneAndUpdate({ _id: util.stringToObjectId(req.params._id) },
+        { $pull: { subscribers: util.stringToObjectId(req.params._idsub) } },
+        function (err, dbUser) {
+            if (err)
+                return callback(err, null);
+            else
+                return callback(null, dbUser);
+        });
+}
+
+module.exports.isUserHasAnAccount = function (req, callback) {
+    User.findOne({ _id: util.stringToObjectId(req.params._id) },
+        function (err, dbUser) {
+            if (err)
+                return callback(err, null);
+            else
+                return callback(null, dbUser);
+        });
+
+}
+
+module.exports.findSubscribers = function (req, callback) {
+    User.find({ followers: util.stringToObjectId(req.params._id) },
+        function (err, dbUser) {
+            if (err)
+                return callback(err, null);
+            else
+                return callback(null, dbUser)
+        }
+    );
+}
+
+module.exports.allAppUsers = function (req, callback) {
+    User.find({
+        _id: { $ne: util.stringToObjectId(req.params._id) },
+        followers: { $ne: util.stringToObjectId(req.params._id) }
+    },
+        function (err, appUsers) {
+            if (err)
+                return callback(err, null);
+            else
                 return callback(null, appUsers);
         }
-    );    
+    );
 }
 

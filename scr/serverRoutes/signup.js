@@ -11,9 +11,8 @@ var userDaoImpl = require('../model/userDaoImpl');
 
 
 router.post('/signup', beforeSignup, saveUser, function (req, res, next) {
-    req.body = util.User(req.body);
     res.status(201)
-        .send(response.responseJson(true, req.body, req.body.token, hateoas.link("signup", {})));
+        .send(response.responseJson(true, util.castUser(req.body), req.body.token, hateoas.link("signup", {})));
 });
 
 function beforeSignup(req, res, next) {

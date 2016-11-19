@@ -41,7 +41,7 @@ module.exports.decodeToken = function (token, callback) {
     });
 }
 
-module.exports.stringToObectId = function (a_string) {
+module.exports.stringToObjectId = function (a_string) {
     return new mongoose.mongo.ObjectId(a_string);
 }
 
@@ -49,7 +49,7 @@ module.exports.generateMongooseId = function () {
     return mongoose.Types.ObjectId();
 }
 
-module.exports.User = function(user){
+module.exports.castUser = function (user) {
     return {
         _id: user._id,
         first_name: user.first_name,
@@ -62,10 +62,7 @@ module.exports.User = function(user){
 }
 
 module.exports.reject = {
-   tweets: 0, 
-   retweets: 0, 
-   email: 0, 
-   password: 0, 
-   subscribers: 0, 
-   __v: 0
+    email: 0,
+    password: 0,
+    __v: 0
 }

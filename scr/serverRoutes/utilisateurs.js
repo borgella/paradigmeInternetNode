@@ -8,12 +8,12 @@ var util = require('../../service/util');
 var userDaoImpl = require('../model/userDaoImpl');
 /** TODO GERER LES VALEURS DE RETOUR ET MOT DE PASSE ETC... */
 router.get('/fil/:_id', createUserFeed, function (req, res, next) {
-    req.body.feed = {
-        userTweets: req.body.dbUser.tweets.reverse(), subscibersTweets: req.body.tweetfeed.reverse(),
-        userRetweets: req.body.dbUser.retweets.reverse(), subscribersRetweets: req.body.retweetfeed.reverse()
-    };
+    //req.body.feed = {
+    //  userTweets: req.body.dbUser.tweets, subscibersTweets: req.body.tweetfeed,
+    //userRetweets: req.body.dbUser.retweets, subscribersRetweets: req.body.retweetfeed
+    //};
     res.status(200)
-        .send(response.responseJson(true, req.body.feed, null, hateoas.link("home", {})));
+        .send(response.responseJson(true, req.body.subscribers, null, hateoas.link("home", {})));
 });
 
 router.post('/tweet/:_id', function (req, res, next) {
@@ -73,29 +73,17 @@ router.delete('/retweet/:_id/:_idretweet', function (req, res, next) {
         } else next(new Error('user does not exist.'));
     });
 });
-// BUG A GERER
-router.get('/abonnements/:_id', createUserFeedSubscribers, function (req, res, next) {
+
+router.get('/abonnements/:_id', createUserFeed, function (req, res, next) {
     res.status(200)
         .send(response.responseJson(true, req.body.subscribers, null, hateoas.link('home', {})));
 });
 
-router.put('/abonnements/:_id/:_idsub', beforeSubscribeUser, function (req, res, next) {
-    // À revoir la méthode
+router.put('/abonnements/:_id/:_idsub', beforeSubscribeUser, addFollower, function (req, res, next) {
     userDaoImpl.addSubscribers(req, function (error, dbUser) {
         if (dbUser) {
-            userDaoImpl.findUserById(req.params._idsub, function (error, subscriber) {
-                if (subscriber.followers.indexOf(util.stringToObectId(req.params._id)) === -1) {
-                    userDaoImpl.addFollowers(req, function (error, subscriber) {
-                        if (subscriber)
-                            res.status(200)
-                                .send(response.responseJson(true, req.body.subscriber, null, hateoas.link("home", {})));
-                        else next(new Error('something went wrong with the database, sorry comeback later'));
-                    });
-                } else {
-                    res.status(200)
-                        .send(response.responseJson(true, req.body.subscriber, null, hateoas.link("home", {})));
-                }
-            });
+            res.status(200)
+                .send(response.responseJson(true, req.body.subscriber, null, hateoas.link("home", {})));
         } else next(new Error('something went wrong with the database, sorry comeback later'));
     });
 });
@@ -105,37 +93,23 @@ router.delete('/abonnements/:_id/:_idsub', beforeDeleteUser, function (req, res,
         .send(response.responseJson(true, req.body.subscribers, null, hateoas.link("home", {})));
 });
 
-router.get('/suggestions/:_id', function (req, res, next) {
-    //il faudrait créer un index pour plus de performance pour la recherche des suggestions.
-    userDaoImpl.allAppUsers(req, function (error, appusers) {
-        if (appusers) {
-            var suggestions = [];
-            if (appusers.length) {
-                appusers.forEach(function (user) {
-                    if (user.followers.indexOf(req.params._id) === -1)
-                        suggestions.push(user);
-                });
-                res.status(200)
-                    .send(response.responseJson(true, suggestions, null, hateoas.link("home", {})));
-            }
-
-        } else next(new Error('database has no users...'));
-    })
+router.get('/suggestions/:_id', suggest, function (req, res, next) {
+    res.status(200)
+        .send(response.responseJson(true, req.body.suggestions, null, hateoas.link("home", {})));
 });
+
+/******************* MiddleWare   ************ */
 
 function createUserFeed(req, res, next) {
     userDaoImpl.isUserHasAnAccount(req, function (error, dbUser) {
         if (dbUser) {
-            req.body.dbUser = dbUser;
-            req.body.tweetfeed = [];
-            req.body.retweetfeed = [];
+            req.body.subscribers = [];
             if (dbUser.subscribers.length) {
-                dbUser.subscribers.forEach(function (subscriber) {
-                    userDaoImpl.findUserById(subscriber, function (error, user) {
-                        req.body.tweetfeed.push(user.tweets.reverse());
-                        req.body.retweetfeed.push(user.retweets.reverse());
-                        next();
-                    })
+                userDaoImpl.findSubscribers(req, function (error, subscribers) {
+                    subscribers.forEach(function (subscriber) {
+                        req.body.subscribers.push(util.castUser(subscriber));
+                    });
+                    next();
                 });
             } else next();
 
@@ -143,26 +117,13 @@ function createUserFeed(req, res, next) {
     });
 }
 
-function createUserFeedSubscribers(req, res, next) {
-    userDaoImpl.isUserHasAnAccount(req, function (error, dbUser) {
-        if (dbUser) {
-            req.body.subscribersfeed = [];
-            if (dbUser.subscribers.length) {
-                req.body.subscribers = dbUser.subscribers;
-                next();
-            } else next();
-        } else next(new Error(' user does not exist'));
-    });
-}
-
 function beforeSubscribeUser(req, res, next) {
     userDaoImpl.isUserHasAnAccount(req, function (error, dbUser) {
         if (dbUser) {
-            if (dbUser.subscribers.indexOf(util.stringToObectId(req.params._idsub)) === -1) {
+            if (dbUser.subscribers.indexOf(util.stringToObjectId(req.params._idsub)) === -1) {
                 userDaoImpl.findUserById(req.params._idsub, function (error, subscriber) {
                     if (subscriber) {
-                        console.log('ABONNÉ: ' + subscriber);
-                        req.body.subscriber = subscriber;
+                        req.body.subscriber = util.castUser(subscriber);
                         next();
                     } else next(new Error('User does not exist '));
                 });
@@ -172,10 +133,22 @@ function beforeSubscribeUser(req, res, next) {
     });
 }
 
+function addFollower(req, res, next) {
+    userDaoImpl.findUserById(req.params._idsub, function (error, subscriber) {
+        if (subscriber.followers.indexOf(util.stringToObjectId(req.params._id)) === -1) {
+            userDaoImpl.addFollowers(req, function (error, subscriber) {
+                if (subscriber)
+                    next();
+                else next(new Error('something went wrong with the database, sorry comeback later'));
+            });
+        } else next();
+    });
+}
+
 function beforeDeleteUser(req, res, next) {
     userDaoImpl.isUserHasAnAccount(req, function (error, dbUser) {
         if (dbUser) {
-            if (dbUser.subscribers.indexOf(util.stringToObectId(req.params._idsub)) >= 0) {
+            if (dbUser.subscribers.indexOf(util.stringToObjectId(req.params._idsub)) >= 0) {
                 userDaoImpl.unsubscribeUser(req, function (error, dbUser) {
                     req.body.subscribers = dbUser.subscribers;
                     next();
@@ -186,13 +159,34 @@ function beforeDeleteUser(req, res, next) {
     });
 }
 
-function generate(req, res, next) {
-    req.body.abonnements = [];
-    req.body.subscribersfeed.forEach(function (subscriber) {
-        userDaoImpl.findUserById(subscriber, function (error, user) {
-            req.body.abonnements.push(user);
-            next();
-        });
+function suggest(req, res, next) {
+    userDaoImpl.isUserHasAnAccount(req, function (error, dbUser) {
+        if (dbUser) {
+            req.body.suggestions = [];
+            userDaoImpl.allAppUsers(req, function (error, appusers) {
+                if (appusers) {
+                    appusers.forEach(function (user) {
+                        req.body.suggestions.push(util.castUser(user));
+                    });
+                    next();
+                } else next(new Error('database has no users...'));
+            });
+
+        }
+    });
+
+}
+
+/** */
+function createUserFeedSubscribers(req, res, next) {
+    userDaoImpl.isUserHasAnAccount(req, function (error, dbUser) {
+        if (dbUser) {
+            req.body.subscribersfeed = [];
+            if (dbUser.subscribers.length) {
+                req.body.subscribers = dbUser.subscribers;
+                next();
+            } else next();
+        } else next(new Error(' user does not exist'));
     });
 }
 
