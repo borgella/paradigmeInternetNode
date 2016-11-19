@@ -6,14 +6,14 @@ var response = require('../views/responseJson');
 var hateoas = require('../../service/hateoas');
 var util = require('../../service/util');
 var userDaoImpl = require('../model/userDaoImpl');
-/** TODO GERER LES VALEURS DE RETOUR ET MOT DE PASSE ETC... */
-router.get('/fil/:_id', createUserFeed, function (req, res, next) {
-    //req.body.feed = {
-    //  userTweets: req.body.dbUser.tweets, subscibersTweets: req.body.tweetfeed,
-    //userRetweets: req.body.dbUser.retweets, subscribersRetweets: req.body.retweetfeed
-    //};
+
+router.get('/fil/:_id', createUserFeedSubscribers, function (req, res, next) {
+    req.body.feed = {
+        userTweets: req.body.dbUser.tweets, subscibersTweets: req.body.tweetfeed,
+        userRetweets: req.body.dbUser.retweets, subscribersRetweets: req.body.retweetfeed
+    };
     res.status(200)
-        .send(response.responseJson(true, req.body.subscribers, null, hateoas.link("home", {})));
+        .send(response.responseJson(true, req.body.feed, null, hateoas.link("home", {})));
 });
 
 router.post('/tweet/:_id', function (req, res, next) {
@@ -98,7 +98,26 @@ router.get('/suggestions/:_id', suggest, function (req, res, next) {
         .send(response.responseJson(true, req.body.suggestions, null, hateoas.link("home", {})));
 });
 
-/******************* MiddleWare   ************ */
+            /*******************    MiddleWare   ********************/
+function createUserFeedSubscribers(req, res, next) {
+    userDaoImpl.isUserHasAnAccount(req, function (error, dbUser) {
+        if (dbUser) {
+            req.body.dbUser = dbUser;
+            req.body.tweetfeed = [];
+            req.body.retweetfeed = [];
+            if (dbUser.subscribers.length) {
+                userDaoImpl.findSubscribers(req, function (error, subscribers) {
+                    subscribers.forEach(function (subscriber) {
+                        req.body.tweetfeed.push(subscriber.tweets);
+                        req.body.retweetfeed.push(subscriber.retweets);
+                    });
+                    next();
+                });
+            } else next();
+
+        } else next(new Error('user does not exist'));
+    });
+}
 
 function createUserFeed(req, res, next) {
     userDaoImpl.isUserHasAnAccount(req, function (error, dbUser) {
@@ -175,19 +194,6 @@ function suggest(req, res, next) {
         }
     });
 
-}
-
-/** */
-function createUserFeedSubscribers(req, res, next) {
-    userDaoImpl.isUserHasAnAccount(req, function (error, dbUser) {
-        if (dbUser) {
-            req.body.subscribersfeed = [];
-            if (dbUser.subscribers.length) {
-                req.body.subscribers = dbUser.subscribers;
-                next();
-            } else next();
-        } else next(new Error(' user does not exist'));
-    });
 }
 
 module.exports = router;
