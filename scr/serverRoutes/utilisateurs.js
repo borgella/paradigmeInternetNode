@@ -89,6 +89,7 @@ router.put('/abonnements/:_id/:_idsub', beforeSubscribeUser, addFollower, functi
 });
 
 router.delete('/abonnements/:_id/:_idsub', beforeDeleteUser, function (req, res, next) {
+    console.log(req.headers);
     res.status(200)
         .send(response.responseJson(true, req.body.subscribers, null, hateoas.link("home", {})));
 });

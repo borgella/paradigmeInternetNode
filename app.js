@@ -16,6 +16,7 @@ var signup = require('./scr/serverRoutes/signup');
 var utilisateurs = require('./scr/serverRoutes/utilisateurs');
 
 var app = express();
+app.disable('x-powered-by');
 
 //app useful librairies
 app.use(bodyParser.json());
