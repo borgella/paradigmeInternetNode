@@ -3,6 +3,7 @@
 var express = require('express');
 var bodyParser = require('body-parser');
 var cookieParser = require('cookie-parser');
+var cors = require('cors');
 var environnement = require('./configuration/environnement');
 var response = require('./scr/views/responseJson');
 var hateoas = require('./service/hateoas');
@@ -21,6 +22,7 @@ app.disable('x-powered-by');
 //app useful librairies
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
+app.use(cors());
 app.use(cookieParser());
 app.use(expressJWT({ secret: environnement.SECRET }).unless({ path: environnement.PATH }));
 app.use(passport.initialize());
@@ -30,7 +32,7 @@ app.use(passport.initialize());
 app.use(require('./configuration/database').getDataBaseConnection);
 
 // Accept incoming 
-app.use(environnement.giveAccess);
+app.use(environnement.headerAccess);
 
 //The use of the routes
 app.use('/', index);
@@ -51,6 +53,7 @@ app.use(function (req, res, next) {
 
 // MiddleWare to catch 500 internal error from the server
 app.use(function (err, req, res, next) {
+  console.log('TOKEN CLIENT = ' + req.headers.authorization);
   err.code = 500;
   res.status(500)
      .send(response.responseJson(false, err.message, null, hateoas.link("home", {})));

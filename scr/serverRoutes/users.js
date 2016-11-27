@@ -10,7 +10,7 @@ var jwt = require('jsonwebtoken');
 
 router.post('/login', findTheUser, function (req, res, next) {
     res.status(200)
-        .send(response.responseJson(true, util.castUser(req.body.dbUser), req.body.token, hateoas.link("login", {})));
+        .send(response.responseJson(true, util.castUser(req.body.dbUser), req.body.id_token, hateoas.link("login", {})));
 });
 
 router.get('/logout', function (req, res, next) {
@@ -27,7 +27,7 @@ function findTheUser(req, res, next) {
                 if (response) {
                     util.generateToken(req.body.email, function (error, token) {
                         if(token){
-                            req.body.token = token;
+                            req.body.id_token = token;
                             next();
                         } else next(new Error("server internal error."));
                     });

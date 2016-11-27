@@ -12,7 +12,7 @@ var userDaoImpl = require('../model/userDaoImpl');
 
 router.post('/signup', beforeSignup, saveUser, function (req, res, next) {
     res.status(201)
-        .send(response.responseJson(true, util.castUser(req.body), req.body.token, hateoas.link("signup", {})));
+        .send(response.responseJson(true, util.castUser(req.body), req.body.id_token, hateoas.link("signup", {})));
 });
 
 function beforeSignup(req, res, next) {
@@ -25,7 +25,7 @@ function beforeSignup(req, res, next) {
                 util.generateToken(req.body.email, function (error, tokens) {
                     if (tokens) {
                         var token = { token: tokens };
-                        req.body.token = token;
+                        req.body.id_token = token;
                         next();
                     } else next(new Error('Can not generate the tokens'));
                 });

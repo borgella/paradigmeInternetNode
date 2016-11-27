@@ -11,16 +11,10 @@ module.exports = {
         
 }
 
-module.exports.giveAccess = function(req,res,next){
+module.exports.headerAccess = function(req,res,next){
     res.header('Access-Control-Allow-Origin', "*");
+    res.header('Access-Control-Allow-Credentials', true);
     res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
     res.header('Access-Control-Allow-Headers', 'Authorization,Content-Type');
-    res.header('Access-Control-Allow-Credentials', true);
     next();
 }
-
-/**
- * PATH: ['/', '/auth/facebook/callback', '/auth/facebook',
-        '/users/signup', '/users/login', '/utilisateurs/fil', '/utilisateurs/tweets', '/utilisateurs/tweet',
-        '/utilisateurs/abonnements', '/utilisateurs/retweet', '/utilisateurs/retweets']
- */
