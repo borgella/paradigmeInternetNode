@@ -6,7 +6,7 @@ var hateoas = require('../service/hateoas');
 var response = require('../scr/views/responseJson');
 
 module.exports.getDataBaseConnection = function(req, res, next){
-    if(mongoose.connection.readyState === 3000){
+    if(mongoose.connection.readyState === 1){
         next();
         return;
     }else{
