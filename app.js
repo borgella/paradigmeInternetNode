@@ -53,7 +53,6 @@ app.use(function (req, res, next) {
 
 // MiddleWare to catch 500 internal error from the server
 app.use(function (err, req, res, next) {
-  console.log('TOKEN CLIENT = ' + req.headers.authorization);
   err.code = 500;
   res.status(500)
      .send(response.responseJson(false, err.message, null, hateoas.link("home", {})));
