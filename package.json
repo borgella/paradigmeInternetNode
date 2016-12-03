@@ -10,6 +10,7 @@
   "author": "Borgella Jean Mary",
   "license": "ISC",
   "dependencies": {
+    "cors": "^2.8.1",
     "express": "^4.14.0",
     "express-jwt": "^3.4.0",
     "hateoas": "~1.0.0",
