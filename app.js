@@ -24,6 +24,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cors());
 app.use(cookieParser());
+app.use(express.static(__dirname + '/public'));
 //app.use(expressJWT({ secret: environnement.SECRET }).unless({ path: environnement.PATH }));
 //app.use(passport.initialize());
 
