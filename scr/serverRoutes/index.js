@@ -13,7 +13,8 @@ router.get('/auth/facebook/callback', passport.authenticate('facebook',
 );
 
 router.get('/favicon.ico', function (req, res, next) {
-    res.end();
+    res.status(200)
+        .sendFile(path.join(__dirname, 'public','index.html'));
 });
 
 router.get('/', function (req, res, next) {
