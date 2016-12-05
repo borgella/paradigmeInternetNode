@@ -12,6 +12,8 @@ router.get('/auth/facebook/callback', passport.authenticate('facebook',
 );
 
 router.get('/', function (req, res, next) {
+    res.status(200)
+        .send('hello world...!')
     next();
 });
 
