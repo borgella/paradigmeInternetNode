@@ -37,7 +37,6 @@ app.use(require('./configuration/database').getDataBaseConnection);
 app.use(environnement.headerAccess);
 
 //The use of the routes
-app.use('/favicon.ico', index);
 app.use('/auth', index);
 app.use('/users', users);
 app.use('/users/', signup);

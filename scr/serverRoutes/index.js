@@ -12,15 +12,9 @@ router.get('/auth/facebook/callback', passport.authenticate('facebook',
     { sucessRedirect: '/', failureRedirect: '/login' })
 );
 
-router.get('/favicon.ico', function (req, res, next) {
-    console.log('TOTOTOTO.....');
-    res.status(200)
-        .sendFile(path.join(__dirname, 'public','index.html'));
-});
-
 router.get('/', function (req, res, next) {
     res.status(200)
-        .sendFile(path.join(__dirname, 'public','index.html'));
+        .sendFile(path.join(__dirname + '/index.html'));
 });
 
 module.exports = router;
