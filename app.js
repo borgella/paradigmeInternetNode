@@ -24,6 +24,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cors());
 app.use(cookieParser());
+
 //app.use(expressJWT({ secret: environnement.SECRET }).unless({ path: environnement.PATH }));
 //app.use(passport.initialize());
 
@@ -39,8 +40,9 @@ app.use('/auth', index);
 app.use('/users', users);
 app.use('/users/', signup);
 app.use('/utilisateurs', utilisateurs);
-app.use('/', index);
+
 app.use(express.static(__dirname + '/public'));
+app.use('/', index);
 
 
 
@@ -58,5 +60,6 @@ app.use(function (err, req, res, next) {
   res.status(500)
      .send(response.responseJson(false, err.message, null, hateoas.link("home", {})));
 });
+
 
 console.log('App is listening at port ' + app.listen(environnement.PORT, function () { }).address().port);

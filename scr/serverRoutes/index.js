@@ -4,6 +4,7 @@ var router = express.Router();
 var response = require('../views/responseJson');
 var hateoas = require('../../service/hateoas');
 var passport = require('../../service/facebook');
+var path = require('path');
 
 router.get('/auth/facebook', passport.authenticate('facebook'));
 
@@ -13,8 +14,7 @@ router.get('/auth/facebook/callback', passport.authenticate('facebook',
 
 router.get('/', function (req, res, next) {
     res.status(200)
-        .send('hello world...!')
-    next();
+        .sendFile(path.join(__dirname, 'public','index.html'));
 });
 
 module.exports = router;

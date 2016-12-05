@@ -26,7 +26,8 @@
     "mongoose-valid8": "^0.1.1",
     "mongoose-validator": "^1.2.5",
     "passport": "^0.3.2",
-    "passport-facebook": "^2.1.1"
+    "passport-facebook": "^2.1.1",
+    "path": "^0.12.7"
   },
   "devDependencies": {
     "blanket": "^1.2.3",
