@@ -44,7 +44,11 @@ app.use('/users/', signup);
 app.use('/utilisateurs', utilisateurs);
 
 app.use(express.static(__dirname + '/public'));
-
+app.get('/', function (req, res, next) {
+    res.status(200)
+        .sendFile('/index.html');
+});
+//app.use('/', index);
 
 
 
