@@ -8,6 +8,7 @@ var environnement = require('./configuration/environnement');
 var response = require('./scr/views/responseJson');
 var hateoas = require('./service/hateoas');
 var favicon = require('serve-favicon');
+var fs = require('fs');
 //var expressJWT = require('express-jwt');
 //var passport = require('./service/facebook');
 
@@ -16,7 +17,7 @@ var index = require('./scr/serverRoutes/index');
 var users = require('./scr/serverRoutes/users');
 var signup = require('./scr/serverRoutes/signup');
 var utilisateurs = require('./scr/serverRoutes/utilisateurs');
-var path = require('path');
+
 
 var app = express();
 app.disable('x-powered-by');
@@ -44,8 +45,15 @@ app.use('/users/', signup);
 app.use('/utilisateurs', utilisateurs);
 
 app.use(express.static(__dirname + '/public'));
-app.use('/', index);
-
+//app.use('/', index);
+app.get('/', function (req, res, next) {
+    fs.readFile('./public/index.html', function (err, data) {
+        if (err) {
+            return console.error(err);
+        }
+        res.status(200).send("The File : " + data.toString());
+    });
+});
 
 
 
