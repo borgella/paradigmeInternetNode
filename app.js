@@ -43,7 +43,7 @@ app.use('/users', users);
 app.use('/users/', signup);
 app.use('/utilisateurs', utilisateurs);
 
-app.use('/https://paradigmeinternetnode.herokuapp.com/', express.static(__dirname + '/public'));
+app.use('/', express.static(__dirname + '/public'));
 
 //app.get('/', function (req, res, next) {
   //  res.status(200)
