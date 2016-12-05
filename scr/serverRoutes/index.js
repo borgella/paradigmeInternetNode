@@ -5,21 +5,15 @@ var response = require('../views/responseJson');
 var hateoas = require('../../service/hateoas');
 var passport = require('../../service/facebook');
 
-
+router.get('/', function (req, res, next) {
+    res.status(200);
+    res.send(response.responseJson(true, "Welcome to the server side of my application, use the angular project to see the front end.", null, null));
+});
 
 router.get('/auth/facebook', passport.authenticate('facebook'));
 
 router.get('/auth/facebook/callback', passport.authenticate('facebook',
     { sucessRedirect: '/', failureRedirect: '/login' })
 );
-
-//router.get('/', function (req, res, next) {
-  //  fs.readFile('../../public/index.html', function (err, data) {
-    //    if (err) {
-      //      return console.error(err);
-        //}
-        //res.status(200).send("The File : " + data.toString());
-    //});
-//});
 
 module.exports = router;

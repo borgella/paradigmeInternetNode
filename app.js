@@ -39,21 +39,13 @@ app.use(require('./configuration/database').getDataBaseConnection);
 app.use(environnement.headerAccess);
 
 //The use of the routes
+app.use('/', index);
 app.use('/auth', index);
 app.use('/users', users);
 app.use('/users/', signup);
 app.use('/utilisateurs', utilisateurs);
 
-app.use(express.static(__dirname + '/public'));
-//app.use('/', index);
-app.get('/', function (req, res, next) {
-    fs.readFile('./public/index.html', function (err, data) {
-        if (err) {
-            return console.error(err);
-        }
-        res.status(200).send("The File : " + data.toString());
-    });
-});
+//app.use(express.static(__dirname + '/public'));
 
 
 
