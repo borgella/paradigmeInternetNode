@@ -7,6 +7,7 @@ var cors = require('cors');
 var environnement = require('./configuration/environnement');
 var response = require('./scr/views/responseJson');
 var hateoas = require('./service/hateoas');
+var favicon = require('serve-favicon');
 //var expressJWT = require('express-jwt');
 //var passport = require('./service/facebook');
 
@@ -24,7 +25,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cors());
 app.use(cookieParser());
-
+app.use(favicon(__dirname + '/public/favicon.ico'));
 //app.use(expressJWT({ secret: environnement.SECRET }).unless({ path: environnement.PATH }));
 //app.use(passport.initialize());
 
@@ -36,6 +37,7 @@ app.use(require('./configuration/database').getDataBaseConnection);
 app.use(environnement.headerAccess);
 
 //The use of the routes
+app.use('/favicon.ico', index);
 app.use('/auth', index);
 app.use('/users', users);
 app.use('/users/', signup);
