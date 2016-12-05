@@ -16,6 +16,7 @@ var index = require('./scr/serverRoutes/index');
 var users = require('./scr/serverRoutes/users');
 var signup = require('./scr/serverRoutes/signup');
 var utilisateurs = require('./scr/serverRoutes/utilisateurs');
+var path = require('path');
 
 var app = express();
 app.disable('x-powered-by');
@@ -43,7 +44,11 @@ app.use('/users/', signup);
 app.use('/utilisateurs', utilisateurs);
 
 app.use(express.static(__dirname + '/public'));
-app.use('/', index);
+router.get('/', function (req, res, next) {
+    res.status(200)
+        .sendFile(path.join(__dirname + '/index.html'));
+});
+//app.use('/', index);
 
 
 
