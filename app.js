@@ -24,7 +24,6 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cors());
 app.use(cookieParser());
-app.use(express.static(__dirname + '/public'));
 //app.use(expressJWT({ secret: environnement.SECRET }).unless({ path: environnement.PATH }));
 //app.use(passport.initialize());
 
@@ -36,11 +35,12 @@ app.use(require('./configuration/database').getDataBaseConnection);
 app.use(environnement.headerAccess);
 
 //The use of the routes
-app.use('/', index);
 app.use('/auth', index);
 app.use('/users', users);
 app.use('/users/', signup);
 app.use('/utilisateurs', utilisateurs);
+app.use('/', index);
+app.use(express.static(__dirname + '/public'));
 
 
 
