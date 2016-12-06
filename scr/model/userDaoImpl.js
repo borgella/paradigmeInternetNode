@@ -116,6 +116,18 @@ module.exports.addFollowers = function (req, callback) {
         });
 }
 
+module.exports.deleteFollower = function(req, callback){
+    User.findOneAndUpdate({ _id: util.stringToObjectId(req.params._idsub) } ,
+        {$pull: {followers: util.stringToObjectId(req.params._id)} },
+        function(error, dbUser){
+            if(error)
+                return callback(error, null);
+            else
+                return callback(null,dbUser);
+        }
+    );
+}
+
 module.exports.unsubscribeUser = function (req, callback) {
     User.findOneAndUpdate({ _id: util.stringToObjectId(req.params._id) },
         { $pull: { subscribers: util.stringToObjectId(req.params._idsub) } },

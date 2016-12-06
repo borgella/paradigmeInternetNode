@@ -88,7 +88,7 @@ router.put('/abonnements/:_id/:_idsub', beforeSubscribeUser, addFollower, functi
     });
 });
 
-router.delete('/abonnements/:_id/:_idsub', beforeDeleteUser, function (req, res, next) {
+router.delete('/abonnements/:_id/:_idsub', beforeDeleteUser,deleteFollower, function (req, res, next) {
     res.status(200)
         .send(response.responseJson(true, req.body.subscribers, null, hateoas.link("home", {})));
 });
@@ -164,12 +164,25 @@ function addFollower(req, res, next) {
     });
 }
 
+function deleteFollower(req, res, next){
+    userDaoImpl.findUserById(req.params._idsub, function(error, user){
+        if(user.followers.indexOf(util.stringToObjectId(req.params._id)) >= 0){
+            userDaoImpl.deleteFollower(req, function(error, subscriber){
+                if(subscriber)
+                    next();
+                else next(new Error('something went wront with the database'));
+            });
+        }else next( new Error('you are no longer in this user followers list'));
+
+    });
+}
+
 function beforeDeleteUser(req, res, next) {
     userDaoImpl.isUserHasAnAccount(req, function (error, dbUser) {
         if (dbUser) {
             if (dbUser.subscribers.indexOf(util.stringToObjectId(req.params._idsub)) >= 0) {
-                userDaoImpl.unsubscribeUser(req, function (error, dbUser) {
-                    req.body.subscribers = dbUser.subscribers;
+                userDaoImpl.unsubscribeUser(req, function (error, user) {
+                    req.body.subscribers = user.subscribers;
                     next();
                 });
             } else next(new Error(' you can not delete this user, you are not his followers '));
