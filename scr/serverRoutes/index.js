@@ -6,8 +6,8 @@ var hateoas = require('../../service/hateoas');
 var passport = require('../../service/facebook');
 
 router.get('/', function (req, res, next) {
-    res.status(200);
-    res.send(response.responseJson(true, "Welcome to the server side of my application, use the angular project to see the front end.", null, null));
+    res.status(200)
+    .redirect(303,'https://borgella.github.io/paradigm-angular/');
 });
 
 router.get('/auth/facebook', passport.authenticate('facebook'));
