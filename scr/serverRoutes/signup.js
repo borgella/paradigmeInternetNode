@@ -11,6 +11,7 @@ var userDaoImpl = require('../model/userDaoImpl');
 
 
 router.post('/signup', beforeSignup, saveUser, function (req, res, next) {
+    //req.body.avatar = 'http://zupimages.net/up/16/49/0xdx.png';
     res.status(201)
         .send(response.responseJson(true, util.castUser(req.body), req.body.id_token, hateoas.link("signup", {})));
 });

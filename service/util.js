@@ -57,7 +57,8 @@ module.exports.castUser = function (user) {
         tweets: user.tweets,
         retweets: user.retweets,
         subscribers: user.subscribers,
-        followers: user.followers
+        followers: user.followers,
+        pictures: user.pictures
     }
 }
 

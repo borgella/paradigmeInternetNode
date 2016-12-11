@@ -37,6 +37,10 @@ module.exports.findUserById = function (_id, callback) {
 
 }
 
+module.exports.saveImage = function(req, callback){
+    
+}
+
 module.exports.postTweet = function (req, callback) {
     req.body.tweet = { _id: util.generateMongooseId(), date: new Date(), tweet: req.body.text };
     User.findOneAndUpdate({ _id: util.stringToObjectId(req.params._id) },

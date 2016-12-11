@@ -66,7 +66,9 @@ var UserSchema = mongoose.Schema({
 
     subscribers: [],
 
-    followers: []
+    followers: [],
+
+    pictures: []
 
 });
 

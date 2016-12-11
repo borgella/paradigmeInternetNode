@@ -7,8 +7,7 @@ var response = require('../scr/views/responseJson');
 
 module.exports.getDataBaseConnection = function(req, res, next){
     if(mongoose.connection.readyState === 1){
-        next();
-        return;
+         return next();
     }else{
         mongoose.connect(environnement.DATABASE_URL, function(err){
             if(err){
@@ -17,7 +16,7 @@ module.exports.getDataBaseConnection = function(req, res, next){
                 next();
             }else{
                 console.log("Sucessfuly connected to " + environnement.DATABASE_URL + "...!");
-                next();
+                return next();
             }
         })
     }

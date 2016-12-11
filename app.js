@@ -35,7 +35,7 @@ app.use(favicon(__dirname + '/public/favicon.ico'));
 //Connect to the dataBase
 app.use(require('./configuration/database').getDataBaseConnection);
 
-// Accept incoming 
+// Accept incoming headers
 app.use(environnement.headerAccess);
 
 //The use of the routes
