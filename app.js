@@ -9,6 +9,7 @@ var response = require('./scr/views/responseJson');
 var hateoas = require('./service/hateoas');
 var favicon = require('serve-favicon');
 var fs = require('fs');
+
 //var expressJWT = require('express-jwt');
 //var passport = require('./service/facebook');
 
@@ -17,6 +18,7 @@ var index = require('./scr/serverRoutes/index');
 var users = require('./scr/serverRoutes/users');
 var signup = require('./scr/serverRoutes/signup');
 var utilisateurs = require('./scr/serverRoutes/utilisateurs');
+var upload = require('./scr/serverRoutes/upload');
 
 
 var app = express();
@@ -44,6 +46,8 @@ app.use('/auth', index);
 app.use('/users', users);
 app.use('/users/', signup);
 app.use('/utilisateurs', utilisateurs);
+app.use('/utilisateurs', upload);
+
 
 //app.use(express.static(__dirname + '/public'));
 

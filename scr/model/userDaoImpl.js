@@ -38,7 +38,16 @@ module.exports.findUserById = function (_id, callback) {
 }
 
 module.exports.saveImage = function(req, callback){
-    
+    req.body.image = {_id: util.generateMongooseId(), name:"avatar", url: 'http://zupimages.net/up/16/49/0xdx.png'};
+    User.findOneAndUpdate({_id: req.body._id},
+        {$push: {pictures: req.body.image} },
+        function(error, dbUser){
+            if(error)
+                return callback(error, null);
+            else
+                return callback(null, dbUser);
+        }
+    );
 }
 
 module.exports.postTweet = function (req, callback) {

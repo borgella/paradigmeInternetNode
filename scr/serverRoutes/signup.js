@@ -11,9 +11,15 @@ var userDaoImpl = require('../model/userDaoImpl');
 
 
 router.post('/signup', beforeSignup, saveUser, function (req, res, next) {
-    //req.body.avatar = 'http://zupimages.net/up/16/49/0xdx.png';
-    res.status(201)
-        .send(response.responseJson(true, util.castUser(req.body), req.body.id_token, hateoas.link("signup", {})));
+    userDaoImpl.saveImage(req, function(error, dbuser){ // ici la bd renvoit l'utilisateur sans la derniere modif ajoutée'
+        if(dbuser){
+            userDaoImpl.findUserByEmail(dbuser.email, function(error, user){ // pour avoir l'utilisateur avec la modif apporte'
+                 res.status(201)
+                .send(response.responseJson(true, util.castUser(user), req.body.id_token, hateoas.link("signup", {})));
+            });
+        } else
+            next(new Error('something went wront with the database.'));
+    });
 });
 
 function beforeSignup(req, res, next) {
