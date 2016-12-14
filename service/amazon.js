@@ -1,4 +1,5 @@
 "use strict"
+/*
 var environnement = require('../configuration/environnement');
 process.env.AWS_ACCESS_KEY_ID = environnement.accessKeyId;
 process.env.AWS_SECRET_ACCESS_KEY = environnement.secretAccessKey;
@@ -39,7 +40,7 @@ module.exports.getAmazonObjectUrl = function(filename, callback){
 var s3Bucket = sBucket;
 
 module.exports.s3Bucket = s3Bucket;
-
+*/
 
 
 

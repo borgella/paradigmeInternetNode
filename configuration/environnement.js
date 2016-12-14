@@ -7,8 +7,8 @@ module.exports = {
     SECRET: process.env.SECRET || 'si yo di w yo we m ou met di se pa vre',
     CLIENT_ID: process.env.CLIENT_ID || 322608071422956,
     CLIENT_SECRET: process.env.CLIENT_SECRET || '9ba5a624c5392b9fb26a89e66a4abe63',
-    accessKeyId: process.env.accessKeyId || 'AKIAJD6SFHCL6STGS3VA',
-    secretAccessKey: process.env.secretAccessKey || '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',
+    //accessKeyId: process.env.accessKeyId || 'AKIAJD6SFHCL6STGS3VA',
+    //secretAccessKey: process.env.secretAccessKey || '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',
     PATH: ['/users/signup' , '/users/login', '/utilisateurs/abonnements/:_id/:_idsub', '/utilisateurs/suggestions/:_id']
         
 }

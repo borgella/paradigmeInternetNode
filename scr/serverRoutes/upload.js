@@ -7,7 +7,7 @@ var response = require('../views/responseJson');
 var hateoas = require('../../service/hateoas');
 var util = require('../../service/util');
 var userDaoImpl = require('../model/userDaoImpl');
-const s3Bucket = require('../../service/amazon');
+//const s3Bucket = require('../../service/amazon');
 
 router.post('/upload', uploadToAmazon, getUrlObject, function(req, res, next) {
     res.status(201)
@@ -16,7 +16,7 @@ router.post('/upload', uploadToAmazon, getUrlObject, function(req, res, next) {
 
 
 function uploadToAmazon(req, res, next){
-    // i do not pass the req object because it contains too much data.
+    /* i do not pass the req object because it contains too much data.
     var data = { Key: req.files.file.name, Body: req.files.file.path }; // pour l'appelle au serveur; key = file and value = le fichier elle meme
     s3Bucket.putAmazonObject(data, function(error, response){
         if(error)
@@ -24,10 +24,13 @@ function uploadToAmazon(req, res, next){
         else
             next();
     });
+    */
+    next();
 }
 
 
 function getUrlObject(req, res, next){
+    /**
     s3Bucket.getAmazonObjectUrl(req.files.file.name, function(error, objectUrl){
         if(error)
             next(new Error('objectUrl error'));
@@ -36,6 +39,7 @@ function getUrlObject(req, res, next){
             next();
         }
     });
+  */
 }
 
 module.exports = router;

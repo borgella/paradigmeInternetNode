@@ -8,7 +8,7 @@ var environnement = require('./configuration/environnement');
 var response = require('./scr/views/responseJson');
 var hateoas = require('./service/hateoas');
 var favicon = require('serve-favicon');
-const express_formidable = require('express-formidable');
+//const express_formidable = require('express-formidable');
 
 //var expressJWT = require('express-jwt');
 //var passport = require('./service/facebook');
@@ -28,7 +28,7 @@ app.disable('x-powered-by');
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cors());
-app.use(express_formidable());
+//app.use(express_formidable());
 app.use(cookieParser());
 app.use(favicon(__dirname + '/public/favicon.ico'));
 //app.use(expressJWT({ secret: environnement.SECRET }).unless({ path: environnement.PATH }));
