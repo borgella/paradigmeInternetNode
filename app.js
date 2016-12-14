@@ -8,7 +8,6 @@ var environnement = require('./configuration/environnement');
 var response = require('./scr/views/responseJson');
 var hateoas = require('./service/hateoas');
 var favicon = require('serve-favicon');
-var fs = require('fs');
 const express_formidable = require('express-formidable');
 
 //var expressJWT = require('express-jwt');
