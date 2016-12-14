@@ -38,7 +38,7 @@ module.exports.findUserById = function (_id, callback) {
 }
 
 module.exports.saveImage = function(req, callback){
-    req.body.image = {_id: util.generateMongooseId(), name:"avatar", url: 'http://zupimages.net/up/16/49/0xdx.png'};
+    req.body.image = {_id: util.generateMongooseId(), name:"avatar", url: 'https://s3.ca-central-1.amazonaws.com/borgellaaws/avatar.jpeg'};
     User.findOneAndUpdate({_id: req.body._id},
         {$push: {pictures: req.body.image} },
         function(error, dbUser){
