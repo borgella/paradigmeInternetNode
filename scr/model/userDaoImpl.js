@@ -174,6 +174,17 @@ module.exports.findSubscribers = function (req, callback) {
     );
 }
 
+module.exports.getAllFollowers = function(req, callback){
+    User.find({ subscribers: util.stringToObjectId(req.params._id) },
+        function(err, appUsers){
+            if(err)
+                return callback(err, null);
+            else
+                return callback(null, appUsers);
+        }
+    );
+}
+
 module.exports.allAppUsers = function (req, callback) {
     User.find({
         _id: { $ne: util.stringToObjectId(req.params._id) },

@@ -93,6 +93,11 @@ router.delete('/abonnements/:_id/:_idsub', beforeDeleteUser,deleteFollower, func
         .send(response.responseJson(true, req.body.subscribers, null, hateoas.link("home", {})));
 });
 
+router.get('/followers/:_id', getAllFollowers, function(req, res, next){
+    res.status(200)
+        .send(response.responseJson(true, req.body.followers, null, hateoas.link("home",{})));
+});
+
 router.get('/suggestions/:_id', suggest, function (req, res, next) {
     res.status(200)
         .send(response.responseJson(true, req.body.suggestions, null, hateoas.link("home", {})));
@@ -188,6 +193,22 @@ function beforeDeleteUser(req, res, next) {
             } else next(new Error(' you can not delete this user, you are not his followers '));
 
         } else next(new Error('user does not exist'));
+    });
+}
+
+function getAllFollowers(req, res, next){
+    userDaoImpl.isUserHasAnAccount(req, function(error, dbUser){
+        if(dbUser){
+            req.body.followers = [];
+            userDaoImpl.getAllFollowers(req, function(error, followers){
+                if(followers){
+                     followers.forEach(function(follower){
+                            req.body.followers.push(util.castUser(follower));
+                      });
+                     next();
+                }else next(new Error('you have no followers'));
+            });
+        }else next(new Error('you do not have an account'));
     });
 }
 

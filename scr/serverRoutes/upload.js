@@ -40,6 +40,7 @@ function getUrlObject(req, res, next){
         }
     });
   */
+  next();
 }
 
 module.exports = router;
