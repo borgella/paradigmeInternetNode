@@ -15,10 +15,9 @@ router.post('/signup', beforeSignup, saveUser, function (req, res, next) {
         if(dbuser){
             userDaoImpl.findUserByEmail(dbuser.email, function(error, user){ // pour avoir l'utilisateur avec la modif apporte'
                  res.status(201)
-                .send(response.responseJson(true, util.castUser(user), req.body.id_token, hateoas.link("signup", {})));
+                    .send(response.responseJson(true, util.castUser(user), req.body.id_token, hateoas.link("signup", {})));
             });
-        } else
-            next(new Error('something went wront with the database.'));
+        } else next(new Error('something went wront with the database.'));
     });
 });
 

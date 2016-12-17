@@ -9,11 +9,9 @@ module.exports.getDataBaseConnection = function(req, res, next){
     if(mongoose.connection.readyState === 1){
          return next();
     }else{
-        mongoose.connect(environnement.DATABASE_URL, function(err){
-            if(err){
-                res.status(400)
-                    .send(response.responseJson(false, "Something went wrong,cant connect to the database...!", hateoas.link("home", {})));
-                next();
+        mongoose.connect(environnement.DATABASE_URL, function(error){
+            if(error){
+                next(new Error("Something went wrong, can't connect to the database...!"));
             }else{
                 console.log("Sucessfuly connected to " + environnement.DATABASE_URL + "...!");
                 return next();

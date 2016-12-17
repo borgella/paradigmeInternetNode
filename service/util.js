@@ -6,9 +6,9 @@ var jwt = require('jsonwebtoken');
 var mongoose = require('mongoose');
 
 module.exports.generateSaltHash = function (value, callback) {
-    bcrypt.hash(value, 10, function (err, hash) {
-        if (err)
-            return callback(err, null);
+    bcrypt.hash(value, 10, function (error, hash) {
+        if (error)
+            return callback(error, null);
         else
             return callback(null, hash);
     });
@@ -23,8 +23,8 @@ module.exports.compareHash = function (value, hash, callback) {
     });
 }
 
-module.exports.generateToken = function (payload, callback) {
-    jwt.sign({ email: payload }, environnement.SECRET, { expiresIn: 86400 }, function (error, token) {
+module.exports.generateToken = function (email_payload, callback) {
+    jwt.sign({ email: email_payload }, environnement.SECRET, { expiresIn: 86400 }, function (error, token) {
         if (error)
             return callback(error, null);
         else
@@ -35,9 +35,9 @@ module.exports.generateToken = function (payload, callback) {
 module.exports.decodeToken = function (token, callback) {
     jwt.verify(token, environnement.SECRET, function (error, decoded) {
         if (error)
-            return callback(error);
+            return callback(error, null);
         else
-            return callback(decoded.email);
+            return callback(null, decoded.email);
     });
 }
 
